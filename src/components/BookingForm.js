@@ -48,7 +48,7 @@ const BookingForm = () => {
         <div className="max-w-5xl mx-auto glassmorphism rounded-3xl overflow-hidden flex flex-col lg:flex-row shadow-[0_0_100px_rgba(255,0,0,0.1)]">
           
           {/* Contact Info Sidebar */}
-          <div className="lg:w-1/3  bg-gradient-to-r from-[#ff0033] to-[#cc0029] p-12 text-white flex flex-col justify-between">
+          <div className="lg:w-1/3 bg-gradient-to-r from-[#ff0033] to-[#cc0029] p-6 md:p-12 text-white flex flex-col justify-between">
             <div>
               <h2 className="font-orbitron text-3xl font-black mb-6 uppercase tracking-tighter">SECURE YOUR CONSULTATION</h2>
               <p className="font-inter text-white/80 mb-12">
@@ -84,7 +84,7 @@ const BookingForm = () => {
           </div>
 
           {/* Form Content */}
-          <div className="lg:w-2/3 p-12 bg-black/40">
+          <div className="lg:w-2/3 p-6 md:p-12 bg-black/40">
             {status === 'success' ? (
               <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}

@@ -2,62 +2,80 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Zap, Target, Heart, Globe, Cpu, Clock, ArrowRight, Scan, ShieldCheck, Activity, Monitor, Stethoscope } from 'lucide-react';
+import { Zap, Target, Heart, Globe, Cpu, Clock, ArrowRight, Scan, ShieldCheck, Activity, Monitor, Stethoscope, Shield, Award, Users } from 'lucide-react';
 import Image from 'next/image';
 
 const reasons = [
   {
+    icon: <Shield className="text-primary" />,
+    title: "Advanced Infrastructure",
+    description: "Equipped with India’s first AI-powered surgical suites and modular, infection-free operation theaters."
+  },
+  {
     icon: <Target className="text-primary" />,
-    title: "Sub-Millimeter Precision",
-    description: "Our robotic systems eliminate human error, ensuring implant placement accuracy within 0.5mm."
+    title: "Affordable Excellence",
+    description: "We offer the most competitive Robotic Knee Replacement Cost in India without compromising quality."
   },
   {
-    icon: <Clock className="text-primary" />,
-    title: "24h Recovery Protocol",
-    description: "Most patients are able to walk and begin physical therapy within 24 hours of the procedure."
-  },
-  {
-    icon: <Cpu className="text-primary" />,
-    title: "Smart AI Diagnostics",
-    description: "Predictive analytics analyze your specific anatomy to create a personalized surgical plan."
+    icon: <Activity className="text-primary" />,
+    title: "Holistic Rehab",
+    description: "Our dedicated physiotherapy wing ensures customized post-surgery recovery plans for every single patient."
   },
   {
     icon: <Globe className="text-primary" />,
-    title: "Global Standards",
-    description: "The same robotic technology used in top hospitals in New York, London, and Tokyo."
+    title: "Global Recognition",
+    description: "Trusted by thousands of international patients for our high success rates and ethical medical practices."
   }
 ];
 
 const technology = [
   {
-    icon: <Cpu className="text-primary" />,
-    title: 'Robotic Surgical Systems', description: 'Advanced robotic arms with 7 degrees of freedom and sub-millimeter precision',
-    image: "/technology/robotic-arm.png",
-  },
-  {
-    title: 'AI Precision Mapping', description: 'Real-time 3D imaging and AI-powered anatomical mapping for perfect surgical planning',
+    title: '3D Mapping', 
+    description: 'Generates a virtual model of your knee, eliminating the need for pre-operative CT scans.',
     icon: <Scan className="text-primary" />,
     image: "/technology/ai-mapping.png",
   },
   {
-    icon: <ShieldCheck className="text-primary" />,
-    title: 'Smart Implants', description: 'Next-generation biocompatible implants with optimized wear resistance',
-    image: "/technology/smart-implant.png",
+    title: 'Real-time Tracking', 
+    description: 'Infrared sensors track bone movement during surgery to ensure the robot stays perfectly on path.',
+    icon: <Zap className="text-primary" />,
+    image: "/technology/tracking.png",
   },
   {
+    title: 'Haptic Feedback', 
+    description: 'Provides physical resistance to the surgeon, preventing any accidental damage to soft tissues or nerves.',
+    icon: <Cpu className="text-primary" />,
+    image: "/technology/robotic-arm.png",
+  },
+  {
+    title: 'AI Analytics', 
+    description: 'Predicts the post-operative range of motion before the first incision is even made by the doctor.',
     icon: <Activity className="text-primary" />,
-    title: 'Digital Diagnostics', description: 'AI-powered diagnostic systems analyzing thousands of patient data points',
     image: "/technology/diagnostics.png",
   },
   {
+    title: 'Smart Implants', 
+    description: 'We use high-grade cobalt-chrome and titanium implants designed for maximum biocompatibility and daily durability.',
+    icon: <ShieldCheck className="text-primary" />,
+    image: "/technology/smart-implant.png",
+  },
+  {
+    title: 'Modular OTs', 
+    description: 'Our theaters feature HEPA filters and laminar airflow to maintain a zero-infection environment during surgery.',
+    icon: <Stethoscope className="text-primary" />,
+    image: "/technology/theatre.png",
+  },
+  {
+    title: 'Digital Planning', 
+    description: 'Pre-surgical software allows Dr. Rajinder Singh to perform a "virtual surgery" before the actual procedure.',
     icon: <Monitor className="text-primary" />,
-    title: '3D Operation Planning', description: 'Virtual surgery simulation and planning for optimal outcomes',
     image: "/technology/planning.png",
   },
   {
-    icon: <Stethoscope className="text-primary" />,
-    title: 'Advanced Operation Theatre', description: 'State-of-the-art surgical suites with integrated AI monitoring systems',
-    image: "/technology/theatre.png",
+    title: 'Remote Monitoring', 
+    description: 'Post-op recovery is tracked via smart apps to ensure your healing is progressing as planned.',
+    icon: <Activity className="text-primary" />,
+    image: "/technology/monitoring.png",
   },
 ]
 
@@ -78,18 +96,19 @@ const WhyChoose = () => {
             <div className="inline-flex items-center gap-3 py-2 px-5 mb-8 rounded-full glassmorphism border border-primary/40 shadow-[0_0_20px_rgba(255,0,0,0.15)]">
               <span className="w-2.5 h-2.5 bg-primary rounded-full animate-ping"></span>
               <span className="text-white   text-sm">
-                EXCELLENCE IN ROBOTIC SURGERY
+                THE KALYAN ADVANTAGE
               </span>
             </div>
-            <h2 className="font-outfit text-4xl md:text-7xl font-black mb-6 uppercase tracking-tighter bg-gradient-to-r from-white  to-[#ff0033] bg-clip-text text-transparent">
-              Why Choose Kalyan Hospital?
+            <h2 className="font-outfit text-3xl md:text-7xl font-black mb-6 uppercase tracking-tighter bg-gradient-to-r from-white  to-[#ff0033] bg-clip-text text-transparent">
+              A Legacy of Excellence in Orthopedic Care
             </h2>
             <p className="font-inter text-white/60 max-w-3xl mx-auto text-xl font-light leading-relaxed">
-              North India's most advanced robotic knee replacement center combining cutting-edge technology with compassionate care  </p>
+              We are recognized as the premier Robotic Knee Replacement Hospital in India, combining high-tech infrastructure with a patient-first philosophy.
+            </p>
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-around px-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-around px-6 md:px-20">
           {reasons.map((benefit, index) => (
             <motion.div
               key={index}
@@ -101,7 +120,7 @@ const WhyChoose = () => {
                 borderColor: 'rgba(255,0,0,0.5)',
                 boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
               }}
-              className="glassmorphism p-10 rounded-[32px] border-2 border-primary transition-all duration-500 group relative overflow-hidden flex flex-col items-center text-center justify-around"
+              className="glassmorphism p-6 md:p-10 rounded-[32px] border-2 border-primary transition-all duration-500 group relative overflow-hidden flex flex-col items-center text-center justify-around"
             >
               <div className="absolute -top-20 -left-20 w-40 h-40 bg-primary/5 rounded-full blur-[60px] group-hover:bg-primary/20 transition-all"></div>
 
@@ -123,12 +142,12 @@ const WhyChoose = () => {
             </motion.div>
           ))}
         </div>
-        <div className="grid grid-cols-4 gap-4 px-20 py-12   pt-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-6 md:px-20 py-12   pt-10">
           {[
-            { val: "15+", label: "Years Of Experience" },
-            { val: "10,000+", label: "Successful Surgeries" },
-            { val: "25+", label: "Expert Surgeons" },
-            { val: "#1", label: "in Punjab" }
+            { val: "30+", label: "Years Of Experience" },
+            { val: "30,000+", label: "Successful Surgeries" },
+            { val: "10+", label: "Expert Surgeons" },
+            { val: "#1", label: "in India" }
           ].map((stat, i) => (
             <div key={i} className="glassmorphism border-1 border-[#ff0033]  py-6 px-2 text-white flex flex-col items-center hover:scale-105 hover:border-[#ff0033] hover:shadow-[0_0_20px_rgba(255,0,0,0.15)] transition-all duration-300">
               <span className="text-4xl font-orbitron font-black text-[#ff0033] tracking-[0.1em]">{stat.val}</span>
@@ -154,18 +173,19 @@ const WhyChoose = () => {
             <div className="inline-flex items-center gap-3 py-2 px-5 mb-8 rounded-full glassmorphism border border-primary/40 shadow-[0_0_20px_rgba(255,0,0,0.15)]">
               <span className="w-2.5 h-2.5 bg-primary rounded-full animate-ping"></span>
               <span className="text-white   text-sm">
-                CUTTING-EDGE INNOVATION
+                THE TECH BEHIND THE TOUCH
               </span>
             </div>
-            <h2 className="font-outfit text-4xl md:text-7xl font-black mb-6 uppercase tracking-tighter bg-gradient-to-r from-white  to-[#ff0033] bg-clip-text text-transparent">
-              Advanced Technology Suite
+            <h2 className="font-outfit text-3xl md:text-7xl font-black mb-6 uppercase tracking-tighter bg-gradient-to-r from-white  to-[#ff0033] bg-clip-text text-transparent">
+              Cutting-Edge AI & Robotic Systems
             </h2>
             <p className="font-inter text-white/60 max-w-3xl mx-auto text-xl font-light leading-relaxed">
-              Explore the revolutionary technologies powering Punjab's most advanced robotic knee replacement center </p>
+              Our facility houses the latest generation of robotic platforms, ensuring we remain the top destination for Robotic Knee Replacement in India.
+            </p>
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-around px-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-around px-6 md:px-20">
           {technology.map((benefit, index) => (
             <motion.div
               key={index}
@@ -177,7 +197,7 @@ const WhyChoose = () => {
                 borderColor: 'rgba(255,0,0,0.5)',
                 boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
               }}
-              className="glassmorphism p-10 rounded-[32px] border-2 border-primary transition-all duration-500 group relative overflow-hidden flex flex-col items-center text-center justify-around"
+              className="glassmorphism p-6 md:p-10 rounded-[32px] border-2 border-primary transition-all duration-500 group relative overflow-hidden flex flex-col items-center text-center justify-around"
             >
               <div className="absolute -top-20 -left-20 w-40 h-40 bg-primary/5 rounded-full blur-[60px] group-hover:bg-primary/20 transition-all"></div>
               <div className='relative w-full aspect-square mb-8 group/img'>

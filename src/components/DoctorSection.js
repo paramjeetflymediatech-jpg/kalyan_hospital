@@ -7,13 +7,13 @@ import Image from 'next/image';
 
 const doctors = [
   {
-    name: "Dr. Aman Deep",
-    title: "Chief Robotic Surgeon",
-    specialty: "AI-Assisted Arthroplasty",
-    experience: "15+ Years",
-    surgeries: "5000+",
+    name: "Dr. Rajinder Singh",
+    title: "Pioneer Robotic Knee Replacement Doctor in India",
+    specialty: "Robotic Joint Replacement",
+    experience: "30+ Years",
+    surgeries: "30,000+",
     image: "/doctors/pp.png",
-    description: "Pioneer in robotic orthopedic surgery in Punjab, specializing in sub-millimeter precision implants."
+    description: "With over three decades of clinical mastery, Dr. Rajinder Singh is a trailblazer in orthopedic innovation. As the leading Robotic Knee Replacement Doctor in India, he has dedicated his career to refining minimally invasive techniques, ensuring every patient regains independence through world-class surgical precision and compassionate care."
   } 
 ];
 
@@ -29,12 +29,12 @@ const DoctorSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <span className="text-primary font-space font-black text-xs uppercase tracking-[0.5em] mb-4 block">World-Class Expertise</span>
-            <h2 className="font-outfit text-4xl md:text-6xl  bg-gradient-to-r from-white  to-[#ff0033] bg-clip-text text-transparent font-black  mb-8 ">
-              Elite Cyber Surgeons
+            <span className="text-primary font-space font-black text-xs uppercase tracking-[0.5em] mb-4 block">Redefining Mobility</span>
+            <h2 className="font-outfit text-3xl md:text-6xl  bg-gradient-to-r from-white  to-[#ff0033] bg-clip-text text-transparent font-black  mb-8 ">
+              Leading Robotic Knee Replacement Hospital in India
             </h2>
             <p className="font-inter text-white/60 max-w-3xl mx-auto text-xl font-light leading-relaxed">
-              Leading the robotic revolution with combined decades of expertise and cutting-edge neural synchronization technology.
+              At Kalyan Hospital, we blend human expertise with artificial intelligence to offer the most sophisticated Robotic Knee Replacement in India. Our center utilizes real-time 3D mapping to preserve natural bone and ligaments, drastically reducing human error and ensuring a knee that feels more natural than ever before.
             </p>
           </motion.div>
         </div>
@@ -50,7 +50,7 @@ const DoctorSection = () => {
             >
               <div className="py-12 relative glassmorphism-premium rounded-[32px] overflow-hidden border border-white/10 flex flex-col md:flex-row shadow-[0_0_50px_rgba(0,0,0,0.5)] group-hover:border-primary/40 transition-all duration-500">
                 {/* Doctor Image with Scan Overlay */}
-                <div className="w-full md:w-5/12 h-96 md:h-auto relative overflow-hidden">
+                <div className="w-full md:w-5/12 h-80 md:h-auto relative overflow-hidden">
                   <Image 
                     src={doc.image} 
                     alt={doc.name} 
@@ -70,7 +70,7 @@ const DoctorSection = () => {
                 </div>
 
                 {/* Doctor Info */}
-                <div className="flex-1 p-10 flex flex-col justify-center">
+                <div className="flex-1 p-6 md:p-10 flex flex-col justify-center">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_10px_#ff0000]"></div>
                     <span className="text-xs uppercase font-space font-black text-primary tracking-[0.4em]">ROBOTIC LEAD SURGEON</span>

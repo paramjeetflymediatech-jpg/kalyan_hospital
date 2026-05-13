@@ -51,10 +51,10 @@ const ContactInfo = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
-                  { icon: <Phone />, title: "Emergency Helpline", value: "+91 98765 43210" },
-                  { icon: <Mail />, title: "Official Email", value: "info@kalyanhospital.com" },
+                  { icon: <Phone />, title: "Emergency Helpline", value: "+91 99150-48877" },
+                  { icon: <Mail />, title: "Official Email", value: "kalyanhospitalhelpline@gmail.com" },
                   { icon: <Clock />, title: "Hospital Hours", value: "Open 24/7" },
-                  { icon: <Share2 />, title: "Social Media", value: "@kalyanhospital" }
+                  { icon: <Share2 />, title: "Social Media", value: "@kalyanhospitalludhiana" }
                 ].map((item, i) => (
                   <div key={i} className="glassmorphism p-8 rounded-3xl border border-white/10 group hover:border-primary/40 transition-all duration-500 bg-white/5">
                     <div className="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center text-primary mb-6 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-500">

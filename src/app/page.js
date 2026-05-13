@@ -41,7 +41,7 @@ export default function Home() {
       <AIChatbot />
       
       <a 
-        href="https://wa.me/919876543210" 
+        href="https://wa.me/9199150-48877" 
         target="_blank" 
         rel="noopener noreferrer"
         className="fixed bottom-8 right-8 w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(37,211,102,0.4)] z-[100] hover:scale-110 transition-transform group"

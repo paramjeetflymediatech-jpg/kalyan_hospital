@@ -109,7 +109,7 @@ const Testimonials = () => {
                 PATIENT SUCCESS STORIES
               </span>
             </div>
-            <h2 className="font-orbitron text-4xl md:text-5xl font-black  mb-6  tracking-tight bg-gradient-to-r from-white  to-[#ff0033] bg-clip-text text-transparent">Life-Changing Results</h2>
+            <h2 className="font-orbitron text-3xl md:text-5xl font-black  mb-6  tracking-tight bg-gradient-to-r from-white  to-[#ff0033] bg-clip-text text-transparent">Life-Changing Results</h2>
             <p className="font-inter text-white/70 max-w-2xl mx-auto">
               Real stories from patients who regained their mobility with our AI-powered robotic surgery
             </p>
@@ -118,7 +118,8 @@ const Testimonials = () => {
 
         <div className="relative w-full overflow-hidden">
           {/* Navigation Buttons */}
-          <div className="absolute top-1/2 left-0 -translate-y-1/2 z-20">
+          {/* Navigation Buttons - Hidden on very small screens to avoid clutter */}
+          <div className="absolute top-1/2 left-0 -translate-y-1/2 z-20 hidden sm:block">
             <button
               onClick={prevSlide}
               className="p-3 rounded-full glassmorphism border border-white/10 text-white/50 hover:text-primary hover:border-primary/50 transition-all group"
@@ -127,7 +128,7 @@ const Testimonials = () => {
             </button>
           </div>
           
-          <div className="absolute top-1/2 right-0 -translate-y-1/2 z-20">
+          <div className="absolute top-1/2 right-0 -translate-y-1/2 z-20 hidden sm:block">
             <button
               onClick={nextSlide}
               className="p-3 rounded-full glassmorphism border border-white/10 text-white/50 hover:text-primary hover:border-primary/50 transition-all group"
@@ -136,7 +137,7 @@ const Testimonials = () => {
             </button>
           </div>
 
-          <div className="flex gap-4 transition-all duration-500 ease-out py-10 px-12">
+          <div className="flex gap-4 transition-all duration-500 ease-out py-10 px-4 md:px-12">
             <AnimatePresence mode="popLayout" initial={false}>
               {getVisibleTestimonials().map((item, idx) => (
                 <motion.div
@@ -186,13 +187,13 @@ const Testimonials = () => {
                     <div className="pt-4 border-t border-white/10">
                       <div className="flex justify-between items-end">
                         <div>
-                          <p className="text-[7px] uppercase tracking-[0.2em] text-white/40 mb-1">Score</p>
+                          <p className="text-[11px] uppercase tracking-[0.2em] text-white mb-1">Score</p>
                           <span className="text-sm font-orbitron font-black text-primary">
                             {item.rating ? `${(item.rating * 20).toFixed(0)}%` : item.score}
                           </span>
                         </div>
                         <div className="text-right">
-                          <p className="text-[7px] uppercase tracking-[0.2em] text-white/40 mb-1">Recovery</p>
+                          <p className="text-[11px] uppercase tracking-[0.2em] text-white mb-1">Recovery</p>
                           <span className="text-xs font-orbitron font-bold text-white/80">
                             {item.time || item.recovery}
                           </span>

@@ -6,43 +6,43 @@ import { Shield, Zap, Activity, Target, Clock, Heart, Award, CheckCircle } from 
 
 const benefits = [
   {
-    title: "Unmatched Precision",
-    description: "AI-driven mapping ensures sub-millimeter accuracy for perfect implant placement.",
+    title: "Sub-millimeter Precision",
+    description: "Achieves exact implant positioning tailored to your unique anatomy for a perfect fit.",
     icon: <Target className="text-primary" size={32} />,
   },
   {
-    title: "Rapid Recovery",
-    description: "Patients can often walk within 24 hours due to minimally invasive techniques.",
-    icon: <Clock className="text-primary" size={32} />,
-  },
-  {
-    title: "Minimal Pain",
-    description: "Advanced robotic guidance reduces tissue trauma and post-operative discomfort.",
-    icon: <Heart className="text-primary" size={32} />,
-  },
-  {
-    title: "Personalized Mapping",
-    description: "3D virtual models of your knee are created for a truly customized surgical plan.",
+    title: "Minimal Bloodloss",
+    description: "Advanced AI-guided incisions ensure minimal disruption to surrounding tissues and vascular structures.",
     icon: <Activity className="text-primary" size={32} />,
   },
   {
-    title: "Longevity",
-    description: "Precise alignment significantly increases the lifespan of the knee implant.",
+    title: "Bone Preservation",
+    description: "The robot removes only the damaged portion, sparing healthy bone for better long-term outcomes.",
     icon: <Shield className="text-primary" size={32} />,
   },
   {
-    title: "AI Analysis",
-    description: "Real-time intraoperative data analysis for optimal clinical decision making.",
+    title: "Ligament Balance",
+    description: "Real-time data allows for perfect ligament tensioning, providing a more stable and natural feel.",
     icon: <Zap className="text-primary" size={32} />,
   },
   {
-    title: "Certified Experts",
-    description: "Performed by world-renowned robotic surgeons with thousands of successful cases.",
+    title: "Reduced Pain",
+    description: "Smaller incisions and less tissue trauma lead to significantly lower post-operative discomfort for patients.",
+    icon: <Heart className="text-primary" size={32} />,
+  },
+  {
+    title: "Faster Discharge",
+    description: "Most patients are able to walk within hours and return home much sooner than traditional surgery.",
+    icon: <Clock className="text-primary" size={32} />,
+  },
+  {
+    title: "Enhanced Longevity",
+    description: "Precise alignment reduces wear and tear on the implant, extending its lifespan for several decades.",
     icon: <Award className="text-primary" size={32} />,
   },
   {
-    title: "Proven Results",
-    description: "98% patient satisfaction rate with life-changing mobility outcomes.",
+    title: "No Scars",
+    description: "Minimally invasive techniques result in smaller, cosmetic-friendly scars and a much neater healing process.",
     icon: <CheckCircle className="text-primary" size={32} />,
   },
 ];
@@ -64,19 +64,19 @@ const Benefits = () => {
             <div className="inline-flex items-center gap-3 py-2 px-5 mb-8 rounded-full glassmorphism border border-primary/40 shadow-[0_0_20px_rgba(255,0,0,0.15)]">
               <span className="w-2.5 h-2.5 bg-primary rounded-full animate-ping"></span>
               <span className="text-white   text-sm">
-               REVOLUTIONARY ADVANTAGES
+               THE ROBOTIC EDGE
               </span>
             </div>
-            <h2 className="font-outfit text-4xl md:text-7xl font-black mb-6 uppercase tracking-tighter bg-gradient-to-r from-white  to-[#ff0033] bg-clip-text text-transparent">
-           Why Choose Robotic Surgery?
+            <h2 className="font-outfit text-3xl md:text-7xl font-black mb-6 uppercase tracking-tighter bg-gradient-to-r from-white  to-[#ff0033] bg-clip-text text-transparent">
+              Transforming Lives Through Precision Engineering
             </h2>
             <p className="font-inter text-white/60 max-w-3xl mx-auto text-xl font-light leading-relaxed">
-              Experience the future of knee replacement with AI-powered precision and superior outcomes
+              Robotic-assisted surgery is the gold standard for joint restoration, offering unmatched accuracy that traditional methods simply cannot replicate.
             </p>
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-around px-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-around px-6 md:px-20">
           {benefits.map((benefit, index) => (
             <motion.div
               key={index}
@@ -88,7 +88,7 @@ const Benefits = () => {
                 borderColor: 'rgba(255,0,0,0.5)',
                 boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
               }}
-              className="glassmorphism p-10 rounded-[32px] border-2 border-primary transition-all duration-500 group relative overflow-hidden flex flex-col items-center text-center justify-around"
+              className="glassmorphism p-6 md:p-10 rounded-[32px] border-2 border-primary transition-all duration-500 group relative overflow-hidden flex flex-col items-center text-center justify-around"
             >
               <div className="absolute -top-20 -left-20 w-40 h-40 bg-primary/5 rounded-full blur-[60px] group-hover:bg-primary/20 transition-all"></div>
               
