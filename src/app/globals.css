@@ -1,26 +1,133 @@
 @import "tailwindcss";
 
+@theme {
+  --color-background: #050505;
+  --color-foreground: #ffffff;
+  --color-primary: #FF0000;
+  --color-primary-hover: #CC0000;
+  --color-secondary: #1A1A1A;
+  --color-accent: #FF3333;
+  --color-glass: rgba(255, 255, 255, 0.05);
+  --color-glass-border: rgba(255, 255, 255, 0.1);
+  
+  --font-orbitron: var(--font-orbitron);
+  --font-outfit: var(--font-outfit);
+  --font-space: var(--font-space);
+  --font-inter: var(--font-inter);
+  --font-rajdhani: var(--font-rajdhani);
+  
+  --background-image-futuristic-grid: linear-gradient(rgba(255, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 0, 0, 0.05) 1px, transparent 1px);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #050505;
+  --foreground: #ffffff;
 }
 
 body {
-  background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--background);
+  font-family: var(--font-inter), sans-serif;
+  overflow-x: hidden;
+}
+
+@layer components {
+  .glassmorphism {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.02);
+  }
+
+  .glassmorphism-premium {
+    background: rgba(5, 5, 5, 0.85);
+    backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 0, 0, 0.15);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(255, 0, 0, 0.05);
+  }
+  
+  .neon-text {
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.9), 0 0 20px rgba(255, 0, 0, 0.5), 0 0 30px rgba(255, 0, 0, 0.3);
+  }
+  
+  .neon-border {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.4), inset 0 0 15px rgba(255, 0, 0, 0.1);
+  }
+
+  .metallic-text {
+    background: linear-gradient(to bottom, #ffffff 0%, #999999 50%, #ffffff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+  }
+
+  
+  .btn-primary {
+    @apply px-8 py-4 bg-gradient-to-r from-[#ff0033] to-[#cc0029] bg-primary text-white font-orbitron font-bold uppercase tracking-[0.2em] transition-all duration-500 active:scale-95 cursor-pointer relative overflow-hidden flex items-center justify-center gap-3;
+    box-shadow: 0 0 15px rgba(215, 71, 71, 0.2);
+    border: 2px solid #d74747;
+    border-radius: 5px;
+  }
+  .btn-secondary {
+    @apply px-8 py-4 bg-gradient-to-r from-[#10a735] to-[#2cc44e] bg-secondary text-white font-orbitron font-bold uppercase tracking-[0.2em] transition-all duration-500 active:scale-95 cursor-pointer relative overflow-hidden flex items-center justify-center gap-3;
+    box-shadow: 0 0 15px rgba(215, 71, 71, 0.2);
+    border: 2px solid #47d76b;
+    border-radius: 5px;
+  }
+  
+  .btn-primary::before,.btn-secondary::before {
+    content: '';
+    @apply absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-all duration-700;
+  }
+
+  .btn-primary:hover  {
+    @apply bg-primary-hover tracking-[0.3em] shadow-[0_0_40px_rgba(255,0,0,0.6)];
+  }
+
+  .btn-primary:hover::before,.btn-secondary:hover::before {
+    @apply left-full;
+  }
+
+  .cyber-grid {
+    background-image: 
+      linear-gradient(rgba(255, 0, 0, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 0, 0, 0.08) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+}
+
+.animate-spin-slow {
+  animation: spin 12s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FF0000;
+  box-shadow: 0 0 10px #ff0000;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
