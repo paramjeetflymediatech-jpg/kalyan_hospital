@@ -80,7 +80,7 @@ const Footer = () => {
                 </div>
                 <div>
                   <p className="text-xs uppercase text-white/60 tracking-widest mb-1 font-bold">24/7 Hotline</p>
-                  <p className="text-sm text-white/60 font-orbitron font-bold">+91 98765-43210</p>
+                  <p className="text-sm text-white/60 font-orbitron font-bold">+91 99150-48877</p>
                 </div>
               </li>
             </ul>

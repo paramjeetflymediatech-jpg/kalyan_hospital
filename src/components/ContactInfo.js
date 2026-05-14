@@ -21,8 +21,8 @@ const ContactInfo = () => {
               referrerPolicy="no-referrer-when-downgrade"
             ></iframe>
             
-            <div className="absolute top-6 left-6 z-30 flex items-center gap-3 glassmorphism px-4 py-2 rounded-full border border-primary/30">
-              <span className="w-2 h-2 bg-primary rounded-full animate-ping"></span>
+            <div className="absolute top-6 right-6 z-30 flex items-center gap-3 glassmorphism px-4 py-2 rounded-full border border-primary/30 bg-primary">
+              <span className="w-2 h-2 bg-white rounded-full animate-ping"></span>
               <span className="text-[10px] font-orbitron font-black text-white uppercase tracking-widest">Live Location System</span>
             </div>
 
@@ -61,7 +61,7 @@ const ContactInfo = () => {
                       {React.cloneElement(item.icon, { size: 24 })}
                     </div>
                     <h5 className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-black mb-3 font-space">{item.title}</h5>
-                    <p className="font-orbitron font-bold text-white text-lg tracking-tight group-hover:text-primary transition-colors">{item.value}</p>
+                    <p className="font-orbitron font-bold text-white text-sm tracking-tight group-hover:text-primary transition-colors">{item.value}</p>
                   </div>
                 ))}
               </div>

@@ -38,7 +38,7 @@ export default function Home() {
       <Footer />
 
       {/* Floating Elements */}
-      <AIChatbot />
+      {/* <AIChatbot /> */}
       
       <a 
         href="https://wa.me/9199150-48877" 

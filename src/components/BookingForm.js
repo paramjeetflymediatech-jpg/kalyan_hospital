@@ -48,30 +48,30 @@ const BookingForm = () => {
         <div className="max-w-5xl mx-auto glassmorphism rounded-3xl overflow-hidden flex flex-col lg:flex-row shadow-[0_0_100px_rgba(255,0,0,0.1)]">
           
           {/* Contact Info Sidebar */}
-          <div className="lg:w-1/3 bg-gradient-to-r from-[#ff0033] to-[#cc0029] p-6 md:p-12 text-white flex flex-col justify-between">
+          <div className="lg:w-2/5 bg-gradient-to-r from-[#ff0033] to-[#cc0029] p-6 md:p-12 text-white flex flex-col justify-between">
             <div>
               <h2 className="font-orbitron text-3xl font-black mb-6 uppercase tracking-tighter">SECURE YOUR CONSULTATION</h2>
               <p className="font-inter text-white/80 mb-12">
                 Join the future of healthcare. Fill out the form and our specialist team will contact you within 2 hours.
               </p>
 
-              <div className="space-y-8">
+              <div className="space-y-2">
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10   rounded-full flex items-center justify-start">
                     <Phone size={20} />
                   </div>
                   <div>
                     <p className="text-xs uppercase tracking-widest text-white/60">Emergency Hotline</p>
-                    <p className="font-bold">+91 98765 43210</p>
+                    <p className="font-bold">+91 99150-48877</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10   rounded-full flex items-center justify-center">
                     <Mail size={20} />
                   </div>
-                  <div>
+                  <div className='pt-2'>
                     <p className="text-xs uppercase tracking-widest text-white/60">Email Address</p>
-                    <p className="font-bold">contact@kalyanrobotics.com</p>
+                    <p className="font-bold">kalyanhospitalhelpline@gmail.com</p>
                   </div>
                 </div>
               </div>
@@ -132,7 +132,7 @@ const BookingForm = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid   ">
                   <div className="relative">
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" size={18} />
                     <input
@@ -143,19 +143,7 @@ const BookingForm = () => {
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
                     />
                   </div>
-                  <div className="relative">
-                    <ClipboardList className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" size={18} />
-                    <select
-                      className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white focus:border-primary transition-all outline-none appearance-none"
-                      value={formData.service}
-                      onChange={(e) => setFormData({...formData, service: e.target.value})}
-                    >
-                      <option className="bg-black text-white">Robotic Knee Replacement</option>
-                      <option className="bg-black text-white">Hip Replacement</option>
-                      <option className="bg-black text-white">AI Diagnostic Checkup</option>
-                      <option className="bg-black text-white">Post-Op Recovery</option>
-                    </select>
-                  </div>
+               
                 </div>
 
                 <div className="relative">
