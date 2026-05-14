@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { 
   RefreshCw, 
@@ -25,7 +25,7 @@ import ServicesManager from '@/components/admin/ServicesManager';
 import RegionsManager from '@/components/admin/RegionsManager';
 import VideoManager from '@/components/admin/VideoManager';
 
-export default function AdminDashboard() {
+function AdminDashboardContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const activeTab = searchParams.get('tab') || 'appointments';
@@ -195,5 +195,17 @@ export default function AdminDashboard() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function AdminDashboard() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center text-primary font-orbitron tracking-widest uppercase">
+        Initializing Hospital OS...
+      </div>
+    }>
+      <AdminDashboardContent />
+    </Suspense>
   );
 }
