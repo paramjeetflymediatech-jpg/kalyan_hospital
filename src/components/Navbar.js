@@ -19,11 +19,10 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: 'Home', href: '#' },
-    { name: 'Surgeons', href: '#doctors' },
-    { name: 'Benefits', href: '#benefits' },
-    { name: 'Technology', href: '#technology' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/about' }, 
+    { name: 'Locations', href: '/locations' },
+    { name: 'Videos', href: '/videos' },
   ];
 
   return (
@@ -47,6 +46,7 @@ const Navbar = () => {
                 src="/logo/kalyan-2.png" 
                 alt="Kalyan Robotic Hospital Logo" 
                 fill
+                sizes="56px"
                 className="object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]"
               />
             </div>
@@ -56,6 +56,7 @@ const Navbar = () => {
                 src="/logo/nabh.png" 
                 alt="NABH Accredited" 
                 fill
+                sizes="48px"
                 className="object-contain"
               />
             </div>

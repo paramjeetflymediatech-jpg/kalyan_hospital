@@ -62,7 +62,7 @@ const Hero = () => {
             <div className="inline-flex items-center gap-3 py-2 px-5 mb-8 rounded-full glassmorphism border border-primary/40 shadow-[0_0_20px_rgba(255,0,0,0.15)]">
               <span className="w-2.5 h-2.5 bg-primary rounded-full animate-ping"></span>
               <span className="text-white text-[10px] md:text-sm">
-                INDIA'S FIRST AI-POWERED ROBOTIC SURGERY CENTER
+                INDIA'S AI-POWERED ROBOTIC SURGERY CENTER
               </span>
             </div>
 

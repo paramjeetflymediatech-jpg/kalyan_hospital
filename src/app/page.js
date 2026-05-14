@@ -12,11 +12,15 @@ import BookingForm from '@/components/BookingForm';
 import Footer from '@/components/Footer';
 import AIChatbot from '@/components/AIChatbot';
 
-export const metadata = {
-  title: "Kalyan Robotic Hospital | Punjab's Future of AI Robotic Knee Replacement",
-  description: "Experience next-generation robotic precision with AI-powered knee replacement surgery at Kalyan Hospital. Best robotic knee surgery in Punjab, India.",
-  keywords: "Robotic Knee Replacement Punjab, AI Knee Surgery Punjab, Best Robotic Knee Hospital Punjab, Robotic Orthopedic Surgery Ludhiana, Advanced Knee Replacement India, Smart Knee Surgery Punjab, AI Orthopedic Hospital India",
-};
+import { getPageMetadata } from '@/lib/seo';
+
+export async function generateMetadata() {
+  const metadata = await getPageMetadata('/');
+  return metadata || {
+    title: "Kalyan Robotic Hospital | Punjab's Future of AI Robotic Knee Replacement",
+    description: "Experience next-generation robotic precision with AI-powered knee replacement surgery at Kalyan Hospital.",
+  };
+}
 
 export default function Home() {
   return (

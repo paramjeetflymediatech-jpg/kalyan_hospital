@@ -2,33 +2,29 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../lib/db';
 
 const Appointment = sequelize.define('Appointment', {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
   name: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
   phone: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
   email: {
     type: DataTypes.STRING,
-    allowNull: true,
   },
   service: {
     type: DataTypes.STRING,
-    allowNull: true,
   },
   message: {
     type: DataTypes.TEXT,
-    allowNull: true,
   },
+  internal_notes: {
+    type: DataTypes.TEXT,
+  }
 }, {
-  timestamps: true,
+  tableName: 'appointments',
+  underscored: true
 });
 
 export default Appointment;

@@ -26,12 +26,21 @@ export const metadata = {
   description: "Experience the world's most advanced AI-powered robotic knee replacement surgery at Kalyan Robotic Hospital. Precision, faster recovery, and personalized care.",
 };
 
-export default function RootLayout({ children }) {
+import { getPageMetadata } from "@/lib/seo";
+import DynamicScripts from "@/components/DynamicScripts";
+
+export default async function RootLayout({ children }) {
+  const globalSeo = await getPageMetadata('GLOBAL');
+  
   return (
     <html lang="en" className="scroll-smooth">
       <body
         className={`${orbitron.variable} ${outfit.variable} ${spaceGrotesk.variable} ${inter.variable} antialiased`}
       >
+        <DynamicScripts 
+          globalHeader={globalSeo?.header_scripts} 
+          globalFooter={globalSeo?.footer_scripts} 
+        />
         {children}
       </body>
     </html>

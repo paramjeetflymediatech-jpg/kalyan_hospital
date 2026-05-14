@@ -2,54 +2,39 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../lib/db';
 
 const Testimonial = sequelize.define('Testimonial', {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
   google_review_id: {
     type: DataTypes.STRING,
-    unique: true,
-    allowNull: true,
+    unique: true
   },
   name: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
   location: {
     type: DataTypes.STRING,
-    defaultValue: 'Google Review',
   },
   text: {
     type: DataTypes.TEXT,
-    allowNull: false,
   },
   image: {
-    type: DataTypes.STRING,
-    allowNull: true,
+    type: DataTypes.STRING(512),
   },
   score: {
     type: DataTypes.STRING,
-    allowNull: true,
-  },
-  recovery: {
-    type: DataTypes.STRING,
-    defaultValue: 'N/A',
   },
   rating: {
-    type: DataTypes.FLOAT,
-    allowNull: true,
+    type: DataTypes.DECIMAL(3, 1),
   },
   time: {
     type: DataTypes.STRING,
-    allowNull: true,
   },
   is_active: {
     type: DataTypes.BOOLEAN,
-    defaultValue: true,
+    defaultValue: true
   }
 }, {
-  timestamps: true,
+  tableName: 'testimonials',
+  underscored: true
 });
 
 export default Testimonial;

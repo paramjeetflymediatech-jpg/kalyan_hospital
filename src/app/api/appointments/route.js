@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import Appointment from '@/models/Appointment';
-import sequelize from '@/lib/db';
 import nodemailer from 'nodemailer';
 
 export async function POST(request) {
@@ -8,23 +7,20 @@ export async function POST(request) {
     const body = await request.json();
     const { name, phone, email, service, message } = body;
 
-    // Sync database
-    await sequelize.sync();
-
-    // Create record in database
+    // Create record in MySQL using Sequelize
     const appointment = await Appointment.create({
       name,
       phone,
       email,
       service,
-      message,
+      message
     });
 
     // Configure Nodemailer
     const transporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
       port: parseInt(process.env.EMAIL_PORT || '587'),
-      secure: false, // true for 465, false for other ports
+      secure: false, 
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
@@ -59,7 +55,6 @@ export async function POST(request) {
       console.log('Notification email sent successfully');
     } catch (emailError) {
       console.error('Email Sending Error:', emailError);
-      // We don't fail the request if email fails, as DB record is created
     }
 
     return NextResponse.json({ 
@@ -75,5 +70,16 @@ export async function POST(request) {
       message: 'Failed to book appointment. Please try again.',
       error: error.message 
     }, { status: 500 });
+  }
+}
+
+export async function GET() {
+  try {
+    const appointments = await Appointment.findAll({
+      order: [['created_at', 'DESC']]
+    });
+    return NextResponse.json({ success: true, data: appointments });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

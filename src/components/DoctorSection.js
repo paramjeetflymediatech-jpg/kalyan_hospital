@@ -55,6 +55,7 @@ const DoctorSection = () => {
                     src={doc.image} 
                     alt={doc.name} 
                     fill 
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-contain group-hover:scale-110 transition-transform duration-[2s]   group-hover:grayscale-0"
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent z-10"></div>
