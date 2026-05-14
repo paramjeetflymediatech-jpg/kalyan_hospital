@@ -1,6 +1,6 @@
 const mysql = require('mysql2/promise');
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '../.env.local') });
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 async function alterDatabase() {
   const config = {
@@ -99,7 +99,7 @@ async function alterDatabase() {
 
     for (const item of tablesToAlter) {
       console.log(`\nChecking table: ${item.table}`);
-      
+
       // Check if table exists
       const [tableExists] = await connection.execute(`
         SELECT COUNT(*) as count 

@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-dotenv.config({ path: '.env.local' });
+dotenv.config({ path: '.env' });
 
 import sequelize from '../src/lib/db.js';
 import Service from '../src/models/Service.js';
