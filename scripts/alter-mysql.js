@@ -11,7 +11,7 @@ async function alterDatabase() {
     port: process.env.DB_PORT || 3306,
   };
 
-  console.log('🚀 Checking for missing columns in MySQL...');
+  console.log('🚀 Checking for missing tables and columns in MySQL...');
 
   try {
     const connection = await mysql.createConnection(config);
@@ -20,6 +20,11 @@ async function alterDatabase() {
       {
         table: 'seo_metadata',
         columns: [
+          { name: 'page_path', type: 'VARCHAR(255) UNIQUE' },
+          { name: 'title', type: 'VARCHAR(255)' },
+          { name: 'description', type: 'TEXT' },
+          { name: 'keywords', type: 'TEXT' },
+          { name: 'og_image', type: 'VARCHAR(512)' },
           { name: 'header_scripts', type: 'TEXT' },
           { name: 'footer_scripts', type: 'TEXT' },
           { name: 'canonical_url', type: 'VARCHAR(512)' },
@@ -31,26 +36,42 @@ async function alterDatabase() {
       {
         table: 'users',
         columns: [
+          { name: 'email', type: 'VARCHAR(255) UNIQUE NOT NULL' },
+          { name: 'password', type: 'VARCHAR(255) NOT NULL' },
+          { name: 'role', type: 'VARCHAR(50) DEFAULT "admin"' },
           { name: 'updated_at', type: 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP' }
         ]
       },
       {
         table: 'appointments',
         columns: [
+          { name: 'name', type: 'VARCHAR(255)' },
+          { name: 'phone', type: 'VARCHAR(50)' },
+          { name: 'email', type: 'VARCHAR(255)' },
+          { name: 'service', type: 'VARCHAR(255)' },
+          { name: 'message', type: 'TEXT' },
+          { name: 'internal_notes', type: 'TEXT' },
           { name: 'updated_at', type: 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP' }
         ]
       },
       {
         table: 'testimonials',
         columns: [
+          { name: 'name', type: 'VARCHAR(255)' },
+          { name: 'content', type: 'TEXT' },
+          { name: 'rating', type: 'INT DEFAULT 5' },
+          { name: 'designation', type: 'VARCHAR(255)' },
+          { name: 'image', type: 'VARCHAR(512)' },
+          { name: 'is_active', type: 'TINYINT(1) DEFAULT 1' },
           { name: 'updated_at', type: 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP' }
         ]
       },
       {
-        table: 'locations',
+        table: 'states',
         columns: [
-          { name: 'state_id', type: 'INT' },
-          { name: 'district_id', type: 'INT' },
+          { name: 'name', type: 'VARCHAR(255) UNIQUE' },
+          { name: 'slug', type: 'VARCHAR(255) UNIQUE' },
+          { name: 'is_active', type: 'TINYINT(1) DEFAULT 1' },
           { name: 'updated_at', type: 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP' }
         ]
       },
@@ -58,7 +79,20 @@ async function alterDatabase() {
         table: 'districts',
         columns: [
           { name: 'name', type: 'VARCHAR(255)' },
+          { name: 'slug', type: 'VARCHAR(255)' },
           { name: 'state_id', type: 'INT' },
+          { name: 'is_active', type: 'TINYINT(1) DEFAULT 1' },
+          { name: 'updated_at', type: 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP' }
+        ]
+      },
+      {
+        table: 'locations',
+        columns: [
+          { name: 'name', type: 'VARCHAR(255)' },
+          { name: 'slug', type: 'VARCHAR(255) UNIQUE' },
+          { name: 'state_id', type: 'INT' },
+          { name: 'district_id', type: 'INT' },
+          { name: 'is_active', type: 'TINYINT(1) DEFAULT 1' },
           { name: 'updated_at', type: 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP' }
         ]
       },
@@ -69,7 +103,9 @@ async function alterDatabase() {
           { name: 'slug', type: 'VARCHAR(255) UNIQUE' },
           { name: 'description', type: 'TEXT' },
           { name: 'content', type: 'TEXT' },
+          { name: 'image', type: 'VARCHAR(512)' },
           { name: 'faqs', type: 'TEXT' },
+          { name: 'is_active', type: 'TINYINT(1) DEFAULT 1' },
           { name: 'updated_at', type: 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP' }
         ]
       },
@@ -98,8 +134,6 @@ async function alterDatabase() {
     ];
 
     for (const item of tablesToAlter) {
-      console.log(`\nChecking table: ${item.table}`);
-
       // Check if table exists
       const [tableExists] = await connection.execute(`
         SELECT COUNT(*) as count 
@@ -115,6 +149,8 @@ async function alterDatabase() {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
           )
         `);
+      } else {
+        console.log(`✅ Table [${item.table}] exists.`);
       }
 
       const [columns] = await connection.execute(`DESCRIBE ${item.table}`);
@@ -124,13 +160,11 @@ async function alterDatabase() {
         if (!existingColumns.includes(col.name)) {
           console.log(`➕ Adding column [${col.name}] to [${item.table}]...`);
           await connection.execute(`ALTER TABLE ${item.table} ADD COLUMN ${col.name} ${col.type}`);
-        } else {
-          console.log(`✅ Column [${col.name}] already exists.`);
         }
       }
     }
 
-    console.log('\n✨ All tables are up to date!');
+    console.log('\n✨ All tables and columns are up to date!');
     await connection.end();
   } catch (error) {
     console.error('❌ Alteration failed:', error.message);
