@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import User from '@/models/User';
 import { signToken } from '@/lib/auth';
 import { cookies } from 'next/headers';
+import bcrypt from 'bcryptjs';
 
 export async function POST(request) {
   try {
@@ -10,7 +11,9 @@ export async function POST(request) {
     // Find user in MySQL
     const user = await User.findOne({ where: { email } });
 
-    if (!user || user.password !== password) {
+    const isMatch = user ? await bcrypt.compare(password, user.password) : false;
+
+    if (!user || !isMatch) {
       return NextResponse.json({ 
         success: false, 
         message: 'Invalid credentials' 

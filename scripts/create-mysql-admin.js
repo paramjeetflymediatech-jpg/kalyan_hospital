@@ -1,5 +1,6 @@
 const mysql = require('mysql2/promise');
 const path = require('path');
+const bcrypt = require('bcryptjs');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 async function createAdmin() {
@@ -19,10 +20,14 @@ async function createAdmin() {
   try {
     const connection = await mysql.createConnection(config);
 
+    // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     // Insert or Update the admin user
     const [result] = await connection.execute(
       'INSERT INTO users (email, password, role) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE password = ?',
-      [email, password, 'admin', password]
+      [email, hashedPassword, 'admin', hashedPassword]
     );
 
     if (result.affectedRows > 0) {
