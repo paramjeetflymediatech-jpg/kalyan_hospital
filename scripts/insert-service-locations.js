@@ -22,13 +22,26 @@ async function insertServiceLocations() {
     const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
     console.log(`🚀 Starting import of ${data.length} service locations...`);
 
-    // We assume 'Robotic Knee Replacement' for now. 
-    // You can modify this to be dynamic if your JSON has a 'service_name' key.
-    const service = await Service.findOne({ where: { name: 'Robotic Knee Replacement' } });
+    // Robust Service Lookup
+    const serviceName = 'Robotic Knee Replacement';
+    let service = await Service.findOne({ 
+      where: { name: serviceName } 
+    });
+
     if (!service) {
-      console.error('❌ Service "Robotic Knee Replacement" not found in database.');
+      // Try slug fallback
+      service = await Service.findOne({ 
+        where: { slug: 'robotic-knee-replacement' } 
+      });
+    }
+
+    if (!service) {
+      console.error(`❌ Service "${serviceName}" not found in database.`);
+      const allServices = await Service.findAll();
+      console.log('Available services in DB:', allServices.map(s => `"${s.name}" (${s.slug})`).join(', '));
       return;
     }
+    console.log(`✅ Using Service: ${service.name} (ID: ${service.id})`);
 
     for (const item of data) {
       console.log(`\n📦 Processing: ${item.city}...`);
