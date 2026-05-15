@@ -8,7 +8,7 @@ import ServiceLocation from '@/models/ServiceLocation';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { CheckCircle2, Phone, Calendar, ArrowRight, ShieldCheck, Layout, Stethoscope, Check, HelpCircle, ChevronDown } from 'lucide-react';
-
+import Image from 'next/image';
 export async function generateMetadata({ params }) {
   const { state, slug } = await params;
   const metadata = await getPageMetadata(`/${state}/${slug}`);
@@ -77,12 +77,39 @@ async function ServiceInLocationPage({ service, location, junction }) {
     faqs = [];
   }
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(f => ({
+      "@type": "Question",
+      "name": f.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": f.a
+      }
+    }))
+  };
+
+  // Fetch page-specific scripts from SEO table
+  const seoData = await getPageMetadata(`/${location.State.slug}/${service.slug}-in-${location.slug}`);
+
   return (
     <main className="min-h-screen bg-[#050505] text-white">
+      {/* Dynamic FAQ Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      
+      {/* Database-stored Scripts (from Admin) */}
+      {seoData?.header_scripts && (
+        <div dangerouslySetInnerHTML={{ __html: seoData.header_scripts }} />
+      )}
+
       <Navbar />
       <Hero service={service} location={location} junction={junction} />
       
-      <div className="container mx-auto max-w-4xl py-24 px-6">
+      <div className="container mx-auto py-6 px-24">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           <div className="lg:col-span-2 space-y-12">
              <div className="prose prose-invert prose-primary max-w-none">
@@ -169,10 +196,37 @@ async function ServiceDetailPage({ service, state }) {
     limit: 12,
     include: [{ model: State, attributes: ['slug'] }]
   });
+
+  let faqs = [];
+  try {
+    faqs = JSON.parse(service.faqs || '[]');
+  } catch (e) {
+    faqs = [];
+  }
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(f => ({
+      "@type": "Question",
+      "name": f.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": f.a
+      }
+    }))
+  };
+
   return (
     <main className="min-h-screen bg-[#050505] text-white">
+      {faqs.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
       <Navbar />
-      <section className="pt-40 pb-24 px-6 relative overflow-hidden">
+      <section className="pt-40 pb-24 px-6  relative overflow-hidden">
         <div className="absolute inset-0 cyber-grid opacity-10"></div>
         <div className="container mx-auto max-w-6xl relative z-10 text-center">
           <div className="inline-flex items-center gap-2 py-1 px-3 mb-6 rounded-full bg-primary/10 border border-primary/30">
@@ -258,6 +312,9 @@ function Hero({ service, location, junction }) {
                 <span>Book Now</span>
               </Link>
             </div>
+          </div>
+          <div className="relative h-[500px] w-[500px]">
+            <Image src={'/kalyan_images/robo.png'} fill/>
           </div>
         </div>
       </div>
