@@ -5,10 +5,10 @@ const secret = new TextEncoder().encode(
   process.env.JWT_SECRET || 'kalyan-robotic-hospital-secret-key-2026'
 );
 
-export async function middleware(request) {
+export async function proxy(request) {
   const token = request.cookies.get('admin_session')?.value;
   
-  const isLoginPage = request.nextUrl.pathname === '/admin/login';
+  const isLoginPage = request.nextUrl.pathname === '/admin/login';  
   const isAdminPage = request.nextUrl.pathname.startsWith('/admin');
 
   if (isAdminPage && !isLoginPage) {
