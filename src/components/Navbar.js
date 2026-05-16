@@ -122,10 +122,10 @@ const Navbar = () => {
               <div className="w-2 h-2 rounded-full bg-primary/20"></div>
             </Link>
           ))}
-          <button className="btn-primary w-full flex items-center justify-center gap-3">
+          <Link href="/book-appointment"> <button className="btn-primary w-full flex items-center justify-center gap-3">
             <PhoneCall size={20} />
-            <span>Consult AI</span>
-          </button>
+            <span>Book Appointment</span>
+          </button></Link>
         </motion.div>
       )}
     </nav>

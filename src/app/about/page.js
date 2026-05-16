@@ -64,7 +64,7 @@ export default function AboutPage() {
           <div className="lg:w-1/2">
             <div className="relative aspect-video w-full glassmorphism rounded-[40px] overflow-hidden border border-white/10 p-2">
                <div className="absolute inset-0 bg-primary/10 flex items-center justify-center">
-                  <Image src="/aboutH.png" className='object-contain' alt="Hospital Vision" fill />
+                  <Image src="/aboutH.png" className='object-cover' alt="Hospital Vision" fill />
                </div>
             </div>
           </div>
