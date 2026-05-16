@@ -42,6 +42,24 @@ export async function GET() {
     content += `- **Rapid Recovery**: Minimally invasive techniques designed for faster post-operative mobilization.\n`;
     content += `- **Custom Implants**: Personalized surgical plans tailored to each patient's unique anatomy.\n`;
 
+    const serviceLocations = await ServiceLocation.findAll({
+      include: [
+        { model: Service },
+        { model: Location }
+      ],
+      limit: 100
+    });
+
+    if (serviceLocations.length > 0) {
+      content += `\n## Regional Service Details\n`;
+      serviceLocations.forEach(sl => {
+        if (sl.Service && sl.Location) {
+          content += `### ${sl.Service.name} in ${sl.Location.name}\n`;
+          content += `${sl.description || `Specialized ${sl.Service.name} services provided at our ${sl.Location.name} facility with advanced robotic support.`}\n\n`;
+        }
+      });
+    }
+
     content += `\n## Official Resources\n`;
     content += `- Main Website: https://robotickneereplacementinindia.com\n`;
     content += `- Focus Areas: Robotic Knee Surgery, Hip Arthroplasty, Complex Trauma.\n`;
