@@ -16,7 +16,8 @@ import {
   Stethoscope,
   MapPin,
   Video,
-  Map as MapIcon
+  Map as MapIcon,
+  FileText
 } from 'lucide-react';
 import SeoManager from '@/components/admin/SeoManager';
 import AppointmentList from '@/components/admin/AppointmentList';
@@ -24,6 +25,7 @@ import TestimonialList from '@/components/admin/TestimonialList';
 import ServicesManager from '@/components/admin/ServicesManager';
 import RegionsManager from '@/components/admin/RegionsManager';
 import VideoManager from '@/components/admin/VideoManager';
+import BlogList from '@/components/admin/BlogList';
 
 function AdminDashboardContent() {
   const router = useRouter();
@@ -71,6 +73,7 @@ function AdminDashboardContent() {
     { id: 'locations', label: 'Regional Network', icon: MapIcon },
     { id: 'videos', label: 'Video Gallery', icon: Video },
     { id: 'seo', label: 'SEO Settings', icon: Globe },
+    { id: 'blogs', label: 'Blog Posts', icon: FileText },
     { id: 'testimonials', label: 'Testimonials', icon: MessageSquare },
   ];
 
@@ -135,6 +138,8 @@ function AdminDashboardContent() {
           {activeTab === 'videos' && <VideoManager />}
 
           {activeTab === 'seo' && <SeoManager />}
+
+          {activeTab === 'blogs' && <BlogList />}
 
           {activeTab === 'testimonials' && (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">

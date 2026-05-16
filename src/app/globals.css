@@ -182,3 +182,59 @@ textarea:-webkit-autofill:focus {
   font-style: italic;
   color: rgba(255,255,255,0.4);
 }
+
+/* Blog Prose Styles */
+.prose-custom {
+  color: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-space), sans-serif;
+  font-size: 1.125rem;
+  line-height: 2;
+}
+.prose-custom p {
+  margin-bottom: 2rem;
+}
+.prose-custom h1, .prose-custom h2, .prose-custom h3 {
+  font-family: var(--font-orbitron), sans-serif;
+  color: white;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+}
+.prose-custom h1 { font-size: 2.5rem; }
+.prose-custom h2 { font-size: 2rem; }
+.prose-custom h3 { font-size: 1.5rem; }
+
+.prose-custom img {
+  border-radius: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 3rem 0;
+  width: 100%;
+}
+
+.prose-custom blockquote {
+  border-left: 4px solid #ff0033;
+  padding-left: 2rem;
+  font-style: italic;
+  color: white;
+  margin: 3rem 0;
+  background: rgba(255, 0, 51, 0.05);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-radius: 0 1rem 1rem 0;
+}
+
+.prose-custom ul, .prose-custom ol {
+  margin-bottom: 2rem;
+  padding-left: 1.5rem;
+}
+
+.prose-custom li {
+  margin-bottom: 0.5rem;
+}
+
+.prose-custom a {
+  color: #ff0033;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}

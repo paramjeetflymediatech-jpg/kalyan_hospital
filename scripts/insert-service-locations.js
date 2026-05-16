@@ -10,6 +10,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 async function insertServiceLocations() {
+  let cityarr=[]
   try {
     // Path to your JSON file
     const jsonPath = path.join(process.cwd(), 'scripts/service_content.json');
@@ -53,6 +54,7 @@ async function insertServiceLocations() {
       });
 
       if (!location) {
+        cityarr.push(item.city)
         console.warn(`⚠️ Location "${item.city}" not found in database. Skipping.`);
         continue;
       }
@@ -114,6 +116,7 @@ async function insertServiceLocations() {
     }
 
     console.log('\n✨ All data has been successfully synchronized with the database!');
+    console.log('City array:', cityarr);
     process.exit(0);
   } catch (error) {
     console.error('❌ Critical Error during insertion:', error);

@@ -23,6 +23,7 @@ const Navbar = () => {
     { name: 'About', href: '/about' }, 
     { name: 'Locations', href: '/locations' },
     { name: 'Videos', href: '/videos' },
+    { name: 'Blog', href: '/blogs' },
   ];
 
   return (

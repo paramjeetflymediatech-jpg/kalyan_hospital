@@ -314,7 +314,7 @@ function Hero({ service, location, junction }) {
             </div>
           </div>
           <div className="relative h-[500px] w-[500px]">
-            <Image src={'/kalyan_Images/robo.png'} fill/>
+            <Image src={'/kalyan_Images/robo.png'} fill alt="Robotic Surgery"/>
           </div>
         </div>
       </div>

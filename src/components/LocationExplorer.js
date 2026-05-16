@@ -49,8 +49,8 @@ export default function LocationExplorer() {
   const fetchStates = async () => {
     try {
       const res = await fetch('/api/states');
-      const data = await res.json();
-      if (data.success) setStates(data.data);
+      const data = await res.json(); 
+      if (data.success) setStates(data.data.filter((state) => state.name === "Punjab" || state.name === "Haryana" || state.name === "Jammu and Kashmir" || state.name === "Himachal Pradesh"));
     } catch (e) { console.error(e); }
     setLoading(prev => ({ ...prev, states: false }));
   };

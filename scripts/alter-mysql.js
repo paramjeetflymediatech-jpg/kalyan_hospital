@@ -130,6 +130,21 @@ async function alterDatabase() {
           { name: 'content', type: 'TEXT' },
           { name: 'faqs', type: 'TEXT' }
         ]
+      },
+      {
+        table: 'blogs',
+        columns: [
+          { name: 'title', type: 'VARCHAR(255) NOT NULL' },
+          { name: 'slug', type: 'VARCHAR(255) UNIQUE NOT NULL' },
+          { name: 'excerpt', type: 'TEXT' },
+          { name: 'content', type: 'LONGTEXT' },
+          { name: 'image', type: 'VARCHAR(512)' },
+          { name: 'author', type: 'VARCHAR(255) DEFAULT "Admin"' },
+          { name: 'status', type: 'VARCHAR(50) DEFAULT "draft"' },
+          { name: 'published_at', type: 'DATETIME' },
+          { name: 'faqs', type: 'TEXT' },
+          { name: 'updated_at', type: 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP' }
+        ]
       }
     ];
 
