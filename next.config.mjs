@@ -13,9 +13,6 @@ const nextConfig = {
       },
     ];
   },
-  experimental: {
-    proxy: 'src/proxy.js',
-  },
   images: {
     remotePatterns: [
       {
