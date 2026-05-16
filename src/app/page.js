@@ -1,4 +1,5 @@
 import Navbar from '@/components/Navbar';
+export const dynamic = 'force-dynamic';
 import Hero from '@/components/Hero';
 import StatsSection from '@/components/StatsSection';
 import Benefits from '@/components/Benefits';

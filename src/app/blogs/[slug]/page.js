@@ -1,4 +1,5 @@
 import Navbar from '@/components/Navbar';
+export const dynamic = 'force-dynamic';
 import Footer from '@/components/Footer';
 import { getPageMetadata } from '@/lib/seo';
 import { Calendar, User, ArrowLeft, Share2, HelpCircle } from 'lucide-react';
@@ -157,7 +158,7 @@ export default async function BlogDetailPage({ params }) {
 
               {/* Blog content */}
               <div 
-                className="prose-custom break-words overflow-hidden"
+                className="prose-custom"
                 dangerouslySetInnerHTML={{ __html: blog.content }}
               />
 
@@ -180,11 +181,11 @@ export default async function BlogDetailPage({ params }) {
               )}
             </div>
 
+            
             {/* Sidebar Column */}
             <aside className="lg:col-span-4">
               <SidebarContactForm />
             </aside>
-            
           </div>
         </div>
       </article>

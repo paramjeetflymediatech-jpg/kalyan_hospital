@@ -1,4 +1,5 @@
 import Navbar from '@/components/Navbar';
+export const dynamic = 'force-dynamic';
 import Footer from '@/components/Footer';
 import { getPageMetadata } from '@/lib/seo';
 import Link from 'next/link';

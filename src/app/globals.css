@@ -188,10 +188,14 @@ textarea:-webkit-autofill:focus {
   color: rgba(255, 255, 255, 0.7);
   font-family: var(--font-space), sans-serif;
   font-size: 1.125rem;
-  line-height: 2;
+  line-height: 2; 
+  word-break: break-all; 
+  word-wrap:break-all;
+  text-align: justify;
 }
 .prose-custom p {
   margin-bottom: 2rem;
+  text-align:justify;
 }
 .prose-custom h1, .prose-custom h2, .prose-custom h3 {
   font-family: var(--font-orbitron), sans-serif;
