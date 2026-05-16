@@ -6,6 +6,7 @@ import { Calendar, User, ArrowLeft, Share2, HelpCircle } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import SidebarContactForm from '@/components/SidebarContactForm';
+import RenderTags from '@/components/RenderTags';
 
 import Blog from '@/models/Blog';
 
@@ -13,26 +14,30 @@ import Blog from '@/models/Blog';
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const blog = await Blog.findOne({ where: { slug, status: 'published' } });
-  
-  if (!blog) return { title: "Blog Post | Kalyan Hospital" };
-
   const dbSeo = await getPageMetadata(`/blogs/${slug}`);
+  
+  if (!blog) return dbSeo || { title: "Blog Post | Kalyan Hospital" };
 
+  // Use DB SEO if available, otherwise fall back to blog content
   return {
+    ...dbSeo,
     title: dbSeo?.title || `${blog.title} | Kalyan Robotic Hospital`,
     description: dbSeo?.description || blog.excerpt || blog.title,
-    keywords: dbSeo?.keywords,
-    alternates: {
-      canonical: dbSeo?.canonical_url || `https://kalyanrobotics.com/blogs/${slug}`,
-    },
     openGraph: {
+      ...dbSeo?.openGraph,
       title: dbSeo?.og_title || blog.title,
       description: dbSeo?.og_description || blog.excerpt,
-      images: [dbSeo?.og_image || blog.image],
+      images: dbSeo?.og_image ? [{ url: dbSeo.og_image }] : (blog.image ? [{ url: blog.image }] : []),
       type: 'article',
       publishedTime: blog.publishedAt || blog.createdAt,
       authors: [blog.author],
     },
+    twitter: {
+      ...dbSeo?.twitter,
+      title: dbSeo?.og_title || blog.title,
+      description: dbSeo?.og_description || blog.excerpt,
+      images: dbSeo?.og_image ? [dbSeo.og_image] : (blog.image ? [blog.image] : []),
+    }
   };
 }
 
@@ -51,6 +56,7 @@ async function getBlog(slug) {
 export default async function BlogDetailPage({ params }) {
   const { slug } = await params;
   const blog = await getBlog(slug);
+  const seoData = await getPageMetadata(`/blogs/${slug}`);
 
   if (!blog) notFound();
 
@@ -97,6 +103,7 @@ export default async function BlogDetailPage({ params }) {
 
   return (
     <main className="min-h-screen bg-[#0a0a0a]">
+      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
       {/* JSON-LD Schemas are kept in the page as they are content-specific */}
       <script
         type="application/ld+json"
@@ -186,6 +193,7 @@ export default async function BlogDetailPage({ params }) {
       </article>
 
       <Footer />
+      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
     </main>
   );
 }

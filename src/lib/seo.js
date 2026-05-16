@@ -42,20 +42,31 @@ export async function getPageMetadata(path) {
     const page = pageData ? pageData.toJSON() : {};
     const global = globalData ? globalData.toJSON() : {};
 
-    let defaultTitle = global.title || 'Kalyan Robotic Hospital';
-    let defaultDesc = global.description || 'Advanced Orthopedic Care';
+    const siteName = global.title || 'Kalyan Robotic Hospital';
+    const defaultDesc = global.description || 'India’s premier destination for AI-powered robotic knee replacement and spine surgery.';
+
+    // Title logic: if page title exists, append site name as suffix (unless it's the home page or global)
+    let title = '';
+    if (isGlobal) {
+      title = global.title || 'Kalyan Robotic Hospital';
+    } else if (path === '/') {
+      title = page.title || siteName;
+    } else {
+      const pageTitle = page.title || (path.replace(/^\//, '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
+      title = page.title ? `${page.title} | ${siteName}` : `${pageTitle} | ${siteName}`;
+    }
 
     if (!pageData && path.includes('-in-')) {
       const parts = path.replace(/^\//, '').split('-in-');
       if (parts.length === 2) {
         const serviceName = parts[0].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         const locationName = parts[1].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-        defaultTitle = `Best ${serviceName} in ${locationName} | Kalyan Robotic Hospital`;
-        defaultDesc = `Experience precision ${serviceName} with AI-powered robotics in ${locationName}, Punjab. Faster recovery and top surgical expertise at Kalyan Hospital.`;
+        title = `Best ${serviceName} in ${locationName} | ${siteName}`;
+        const autoDesc = `Experience precision ${serviceName} with AI-powered robotics in ${locationName}, Punjab. Faster recovery and top surgical expertise at Kalyan Hospital.`;
+        if (!page.description) page.description = autoDesc;
       }
     }
 
-    const title = page.title || defaultTitle;
     const description = page.description || defaultDesc;
     const keywords = [page.keywords, global.keywords].filter(Boolean).join(', ');
     const ogImage = page.og_image || global.og_image || '';
@@ -81,16 +92,16 @@ export async function getPageMetadata(path) {
       page_footer_tags: parseScriptTags(page.footer_scripts || ''),
       
       openGraph: {
-        title: page.og_title || global.og_title || title,
-        description: page.og_description || global.og_description || description,
+        title: page.og_title || title,
+        description: page.og_description || description,
         images: ogImage ? [{ url: ogImage }] : [],
-        siteName: global.title || 'Kalyan Robotic Hospital',
+        siteName: siteName,
         type: 'website',
       },
       twitter: {
         card: 'summary_large_image',
-        title: page.og_title || global.og_title || title,
-        description: page.og_description || global.og_description || description,
+        title: page.og_title || title,
+        description: page.og_description || description,
         images: ogImage ? [ogImage] : [],
       }
     };

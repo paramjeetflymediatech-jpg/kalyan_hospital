@@ -8,12 +8,22 @@ import FAQ from '@/components/FAQ';
 import ContactInfo from '@/components/ContactInfo';
 import BookingForm from '@/components/BookingForm';
 import Footer from '@/components/Footer';
+import { getPageMetadata } from '@/lib/seo';
+import RenderTags from '@/components/RenderTags';
 
 export const dynamic = 'force-dynamic';
 
-export default function Home() {
+export async function generateMetadata() {
+  const metadata = await getPageMetadata('/');
+  return metadata || {};
+}
+
+export default async function Home() {
+  const seoData = await getPageMetadata('/');
+
   return (
     <main className="min-h-screen bg-[#0a0a0a] selection:bg-primary selection:text-white">
+      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
       <Navbar />
       <Hero />
       
@@ -28,6 +38,7 @@ export default function Home() {
       </div>
 
       <Footer />
+      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
 
       <a 
         href="https://wa.me/9199150-48877" 

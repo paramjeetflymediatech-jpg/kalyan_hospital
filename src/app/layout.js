@@ -23,10 +23,19 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-export const metadata = {
-  title: "Kalyan Robotic Hospital | Punjab's Future of AI Robotic Knee Replacement",
-  description: "Experience the world's most advanced AI-powered robotic knee replacement surgery at Kalyan Hospital.",
-};
+export async function generateMetadata() {
+  const seoData = await getPageMetadata('GLOBAL');
+  if (!seoData) return {};
+  
+  return {
+    title: seoData.title,
+    description: seoData.description,
+    keywords: seoData.keywords,
+    alternates: seoData.alternates,
+    openGraph: seoData.openGraph,
+    twitter: seoData.twitter,
+  };
+}
 
 export default async function RootLayout({ children }) {
   const seoData = await getPageMetadata('GLOBAL');
