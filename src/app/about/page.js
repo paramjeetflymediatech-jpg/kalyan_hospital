@@ -3,6 +3,7 @@ import Footer from '@/components/Footer';
 import { getPageMetadata } from '@/lib/seo';
 import { ShieldCheck, Target, Users, Zap } from 'lucide-react';
 import Image from 'next/image';
+import RenderTags from '@/components/RenderTags';
 
 export async function generateMetadata() {
   const metadata = await getPageMetadata('/about');
@@ -12,7 +13,9 @@ export async function generateMetadata() {
   };
 }
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const seoData = await getPageMetadata('/about');
+
   const coreValues = [
     { icon: <Target className="text-primary" />, title: "Precision", desc: "Sub-millimeter accuracy in every robotic procedure." },
     { icon: <ShieldCheck className="text-primary" />, title: "Trust", desc: "NABH accredited care with a legacy of surgical excellence." },
@@ -22,6 +25,9 @@ export default function AboutPage() {
 
   return (
     <main className="min-h-screen bg-[#050505] text-white">
+      {/* Page-specific Scripts (SSR / View Source) */}
+      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
+
       <Navbar />
       
       {/* Hero Section */}
@@ -83,6 +89,9 @@ export default function AboutPage() {
       </section>
 
       <Footer />
+
+      {/* Page-specific Footer Scripts (SSR / View Source) */}
+      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
     </main>
   );
 }

@@ -5,6 +5,7 @@ import { getPageMetadata } from '@/lib/seo';
 import { Play, Film, Video } from 'lucide-react';
 import VideoModel from '@/models/Video';
 import VideoGallery from '@/components/VideoGallery';
+import RenderTags from '@/components/RenderTags';
 
 export async function generateMetadata() {
   const metadata = await getPageMetadata('/videos');
@@ -16,9 +17,13 @@ export async function generateMetadata() {
 
 export default async function VideosPage() {
   const videos = await VideoModel.findAll({ order: [['published_at', 'DESC']] });
+  const seoData = await getPageMetadata('/videos');
 
   return (
     <main className="min-h-screen bg-[#050505] text-white selection:bg-primary">
+      {/* Page-specific Scripts (SSR / View Source) */}
+      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
+
       <Navbar />
       
       {/* Hero Section */}
@@ -55,6 +60,9 @@ export default async function VideosPage() {
       </section>
 
       <Footer />
+
+      {/* Page-specific Footer Scripts (SSR / View Source) */}
+      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
     </main>
   );
 }

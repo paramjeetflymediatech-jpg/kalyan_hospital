@@ -150,7 +150,7 @@ const WhyChoose = () => {
             { val: "#1", label: "in India" }
           ].map((stat, i) => (
             <div key={i} className="glassmorphism border-1 border-[#ff0033]  py-6 px-2 text-white flex flex-col items-center hover:scale-105 hover:border-[#ff0033] hover:shadow-[0_0_20px_rgba(255,0,0,0.15)] transition-all duration-300">
-              <span className="text-4xl font-orbitron font-black text-[#ff0033] tracking-[0.1em]">{stat.val}</span>
+              <span className="text-2xl font-orbitron font-black text-[#ff0033] tracking-[0.1em]">{stat.val}</span>
               <span className="text-[9px] uppercase tracking-[0.4em]  font-black mt-2">{stat.label}</span>
             </div>
           ))}

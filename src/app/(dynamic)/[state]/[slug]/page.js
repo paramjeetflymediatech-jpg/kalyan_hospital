@@ -9,6 +9,9 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { CheckCircle2, Phone, Calendar, ArrowRight, ShieldCheck, Layout, Stethoscope, Check, HelpCircle, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
+import RenderTags from '@/components/RenderTags';
+
+// Metadata is handled universaly in layout.js, but keep generateMetadata if we want specific params handling
 export async function generateMetadata({ params }) {
   const { state, slug } = await params;
   const metadata = await getPageMetadata(`/${state}/${slug}`);
@@ -17,6 +20,7 @@ export async function generateMetadata({ params }) {
 
 export default async function DynamicPage({ params }) {
   const { state, slug } = await params;
+  const seoData = await getPageMetadata(`/${state}/${slug}`);
   
   // 0. Verify State exists
   const stateDoc = await State.findOne({ where: { slug: state } });
@@ -36,21 +40,19 @@ export default async function DynamicPage({ params }) {
       })
     ]);
 
-     
-
     if (service && location) {
       const junction = await ServiceLocation.findOne({ 
         where: { service_id: service.id, location_id: location.id } 
       });
       
-      return <ServiceInLocationPage service={service} location={location} junction={junction} />;
+      return <ServiceInLocationPage service={service} location={location} junction={junction} seoData={seoData} />;
     }
   }
 
   // 2. Handle Standalone Service Page (e.g. robotic-knee-surgery)
   const service = await Service.findOne({ where: { slug } });
   if (service) {
-    return <ServiceDetailPage service={service} state={stateDoc} />;
+    return <ServiceDetailPage service={service} state={stateDoc} seoData={seoData} />;
   }
 
   // 3. Handle Standalone Location Page (e.g. ludhiana)
@@ -59,7 +61,7 @@ export default async function DynamicPage({ params }) {
     include: [{ model: State, attributes: ['slug'] }]
   });
   if (location) {
-    return <LocationDetailPage location={location} />;
+    return <LocationDetailPage location={location} seoData={seoData} />;
   }
 
   return notFound();
@@ -67,7 +69,7 @@ export default async function DynamicPage({ params }) {
 
 // --- SUB-COMPONENTS ---
 
-async function ServiceInLocationPage({ service, location, junction }) {
+async function ServiceInLocationPage({ service, location, junction, seoData }) {
   let faqs = [];
   try {
     const localFaqs = JSON.parse(junction?.faqs || '[]');
@@ -90,22 +92,17 @@ async function ServiceInLocationPage({ service, location, junction }) {
     }))
   };
 
-  // Fetch page-specific scripts from SEO table
-  const seoData = await getPageMetadata(`/${location.State.slug}/${service.slug}-in-${location.slug}`);
-
   return (
     <main className="min-h-screen bg-[#050505] text-white">
+      {/* Page-specific Scripts */}
+      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
+      
       {/* Dynamic FAQ Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       
-      {/* Database-stored Scripts (from Admin) */}
-      {seoData?.header_scripts && (
-        <div dangerouslySetInnerHTML={{ __html: seoData.header_scripts }} />
-      )}
-
       <Navbar />
       <Hero service={service} location={location} junction={junction} />
       
@@ -186,11 +183,12 @@ async function ServiceInLocationPage({ service, location, junction }) {
       </div>
 
       <Footer />
+      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
     </main>
   );
 }
 
-async function ServiceDetailPage({ service, state }) {
+async function ServiceDetailPage({ service, state, seoData }) {
   const locations = await Location.findAll({ 
     where: { state_id: state.id },
     limit: 12,
@@ -219,6 +217,7 @@ async function ServiceDetailPage({ service, state }) {
 
   return (
     <main className="min-h-screen bg-[#050505] text-white">
+      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
       {faqs.length > 0 && (
         <script
           type="application/ld+json"
@@ -254,14 +253,16 @@ async function ServiceDetailPage({ service, state }) {
         </div>
       </section>
       <Footer />
+      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
     </main>
   );
 }
 
-async function LocationDetailPage({ location }) {
+async function LocationDetailPage({ location, seoData }) {
   const services = await Service.findAll({ limit: 12 });
   return (
     <main className="min-h-screen bg-[#050505] text-white">
+      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
       <Navbar />
       <section className="pt-40 pb-24 px-6 relative overflow-hidden text-center">
         <div className="absolute inset-0 cyber-grid opacity-10"></div>
@@ -288,6 +289,7 @@ async function LocationDetailPage({ location }) {
         </div>
       </section>
       <Footer />
+      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
     </main>
   );
 }

@@ -1,9 +1,6 @@
 import Navbar from '@/components/Navbar';
-export const dynamic = 'force-dynamic';
 import Hero from '@/components/Hero';
-import StatsSection from '@/components/StatsSection';
 import Benefits from '@/components/Benefits';
-import TechnologyShowcase from '@/components/TechnologyShowcase';
 import WhyChoose from '@/components/WhyChoose';
 import DoctorSection from '@/components/DoctorSection';
 import Testimonials from '@/components/Testimonials';
@@ -11,28 +8,18 @@ import FAQ from '@/components/FAQ';
 import ContactInfo from '@/components/ContactInfo';
 import BookingForm from '@/components/BookingForm';
 import Footer from '@/components/Footer';
-import AIChatbot from '@/components/AIChatbot';
 
-import { getPageMetadata } from '@/lib/seo';
-
-export async function generateMetadata() {
-  const metadata = await getPageMetadata('/');
-  return metadata || {
-    title: "Kalyan Robotic Hospital | Punjab's Future of AI Robotic Knee Replacement",
-    description: "Experience next-generation robotic precision with AI-powered knee replacement surgery at Kalyan Hospital.",
-  };
-}
+export const dynamic = 'force-dynamic';
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#0a0a0a] selection:bg-primary selection:text-white">
       <Navbar />
       <Hero />
-      {/* <StatsSection /> */}
+      
       <div className="relative">
         <DoctorSection />
         <Benefits />
-        {/* <TechnologyShowcase /> */}
         <WhyChoose />
         <Testimonials />
         <ContactInfo />
@@ -42,9 +29,6 @@ export default function Home() {
 
       <Footer />
 
-      {/* Floating Elements */}
-      {/* <AIChatbot /> */}
-      
       <a 
         href="https://wa.me/9199150-48877" 
         target="_blank" 

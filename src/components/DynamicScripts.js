@@ -3,20 +3,24 @@
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export default function DynamicScripts({ globalHeader, globalFooter }) {
+/**
+ * Handles page-specific script injection.
+ * Global scripts are handled separately in layout.js (<head>) and Footer.js (<footer>).
+ */
+export default function DynamicScripts() {
   const pathname = usePathname();
   const [pageScripts, setPageScripts] = useState({ header: '', footer: '' });
 
+  // Handle Page-Specific Scripts Fetching
   useEffect(() => {
-    // Fetch page-specific scripts when pathname changes
     async function fetchPageScripts() {
       try {
         const res = await fetch(`/api/seo?path=${pathname}`);
         const result = await res.json();
         if (result.success && result.data && result.data.page_path !== 'GLOBAL') {
           setPageScripts({
-            header: result.data.header_scripts || '',
-            footer: result.data.footer_scripts || ''
+            header: result.data.page_header || '',
+            footer: result.data.page_footer || ''
           });
         } else {
           setPageScripts({ header: '', footer: '' });
@@ -31,22 +35,29 @@ export default function DynamicScripts({ globalHeader, globalFooter }) {
     }
   }, [pathname]);
 
-  return (
-    <>
-      {/* Header Scripts */}
-      {(globalHeader || pageScripts.header) && (
-        <div 
-          id="header-scripts"
-          dangerouslySetInnerHTML={{ __html: (globalHeader || '') + '\n' + (pageScripts.header || '') }} 
-        />
-      )}
-      
-      {/* Footer Scripts Wrapper - this will be moved to the end of body by layout */}
-      <div 
-        id="footer-scripts-container"
-        className="hidden"
-        data-footer-content={(globalFooter || '') + '\n' + (pageScripts.footer || '')}
-      />
-    </>
-  );
+  // Inject Page-Specific Scripts
+  useEffect(() => {
+    // 1. Page Header Scripts
+    const existingHeader = document.querySelectorAll('.page-header-script');
+    existingHeader.forEach(el => el.remove());
+
+    if (pageScripts.header?.trim()) {
+      const fragment = document.createRange().createContextualFragment(pageScripts.header);
+      fragment.querySelectorAll('script').forEach(s => s.classList.add('page-header-script'));
+      document.head.appendChild(fragment);
+    }
+
+    // 2. Page Footer Scripts
+    const existingFooter = document.querySelectorAll('.page-footer-script');
+    existingFooter.forEach(el => el.remove());
+
+    if (pageScripts.footer?.trim()) {
+      const target = document.getElementById('footer-scripts-hook') || document.body;
+      const fragment = document.createRange().createContextualFragment(pageScripts.footer);
+      fragment.querySelectorAll('script').forEach(s => s.classList.add('page-footer-script'));
+      target.appendChild(fragment);
+    }
+  }, [pageScripts]);
+
+  return null;
 }

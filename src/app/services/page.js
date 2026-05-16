@@ -4,6 +4,7 @@ import { getPageMetadata } from '@/lib/seo';
 import Service from '@/models/Service';
 import Link from 'next/link';
 import { Stethoscope, ArrowRight, CheckCircle2 } from 'lucide-react';
+import RenderTags from '@/components/RenderTags';
 
 export async function generateMetadata() {
   const metadata = await getPageMetadata('/services');
@@ -15,9 +16,13 @@ export async function generateMetadata() {
 
 export default async function ServicesPage() {
   const services = await Service.findAll({ order: [['name', 'ASC']] });
+  const seoData = await getPageMetadata('/services');
 
   return (
     <main className="min-h-screen bg-[#050505] text-white">
+      {/* Page-specific Scripts (SSR / View Source) */}
+      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
+
       <Navbar />
       
       {/* Hero Section */}
@@ -61,12 +66,12 @@ export default async function ServicesPage() {
                   <p className="text-white/40 text-lg leading-relaxed mb-10 line-clamp-3">
                     {svc.description || "Cutting-edge robotic-assisted procedure designed for maximum precision, minimal blood loss, and accelerated patient recovery."}
                   </p>
-
+ 
                   <div className="grid grid-cols-2 gap-4 mb-10">
                     {[
                       "AI Alignment",
                       "3D Planning",
-                      "Minimal Invasive",
+                      "Minimally Invasive",
                       "Fast Recovery"
                     ].map((f, i) => (
                       <div key={i} className="flex items-center gap-2 text-xs font-space uppercase tracking-widest text-white/20">
@@ -75,7 +80,7 @@ export default async function ServicesPage() {
                       </div>
                     ))}
                   </div>
-
+ 
                   <Link 
                     href="/locations"
                     className="inline-flex items-center gap-3 py-4 px-8 bg-white/5 rounded-2xl border border-white/10 hover:bg-primary/10 hover:border-primary/40 transition-all font-orbitron font-bold text-xs uppercase tracking-widest"
@@ -89,8 +94,11 @@ export default async function ServicesPage() {
           </div>
         </div>
       </section>
-
+ 
       <Footer />
+
+      {/* Page-specific Footer Scripts (SSR / View Source) */}
+      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
     </main>
   );
 }

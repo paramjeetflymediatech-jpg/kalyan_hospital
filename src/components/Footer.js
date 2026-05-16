@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Send, Cpu, Globe, MapPin, Phone, Share2, Camera, Play } from 'lucide-react';
+import { Globe, MapPin, Phone } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -87,11 +87,10 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Quantum Newsletter */}
+          {/* Social Links */}
           <div>
             <h4 className="font-orbitron font-bold text-white uppercase tracking-[0.3em] text-xs mb-10 metallic-text">Social Links</h4>
             
-        
             <div className="flex gap-4 mt-8 flex-wrap">
               {[
                 { 
@@ -146,7 +145,6 @@ const Footer = () => {
             <p className="text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-white/50 font-bold">
               © 2026 KALYAN ROBOTIC HOSPITAL.
             </p>
-
           </div>
 
           <div className="flex items-center gap-3 glassmorphism px-4 py-2 rounded-full border border-white/5">
@@ -162,6 +160,9 @@ const Footer = () => {
         transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
         className="absolute bottom-0 h-px w-full bg-gradient-to-r from-transparent via-primary/20 to-transparent"
       />
+
+      {/* Anchor point for global footer scripts managed by layout.js */}
+      <div id="footer-scripts-hook" className="hidden"></div>
     </footer>
   );
 };

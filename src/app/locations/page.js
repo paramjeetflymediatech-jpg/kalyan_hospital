@@ -3,10 +3,10 @@ import Footer from '@/components/Footer';
 import { getPageMetadata } from '@/lib/seo';
 import LocationExplorer from '@/components/LocationExplorer';
 import { MapPin } from 'lucide-react';
+import RenderTags from '@/components/RenderTags';
 
 export async function generateMetadata() {
   const metadata = await getPageMetadata('/locations');
-  console.log(metadata,'ssss')
   return metadata || {
     title: "Best Robotic Surgery in India | Our Service Locations",
     description: "Explore the best robotic knee and spine surgery services available across India. Find the nearest Kalyan Robotic Hospital hub.",
@@ -14,8 +14,13 @@ export async function generateMetadata() {
 }
 
 export default async function LocationsPage() {
+  const seoData = await getPageMetadata('/locations');
+
   return (
     <main className="min-h-screen bg-[#050505] text-white selection:bg-primary selection:text-white">
+      {/* Page-specific Scripts (SSR / View Source) */}
+      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
+
       <Navbar />
       
       {/* Hero Section */}
@@ -46,6 +51,9 @@ export default async function LocationsPage() {
       </section>
 
       <Footer />
+
+      {/* Page-specific Footer Scripts (SSR / View Source) */}
+      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
     </main>
   );
 }

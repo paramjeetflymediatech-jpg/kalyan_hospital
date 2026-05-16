@@ -28,14 +28,6 @@ export async function GET() {
     } else {
       content += `Regularly updated clinical insights on robotic knee and hip replacements.\n`;
     }
-    
-
-    content += `\n## Regional Network\n`;
-    content += `Providing world-class robotic care across major cities in Punjab and Northern India, including:\n`;
-    locations.forEach(l => {
-      content += `- ${l.name}\n`;
-    });
-
 
     content += `\n## Technological Core\n`;
     content += `- **AI-Robotic Precision**: Advanced surgical mapping and execution with sub-millimeter accuracy.\n`;
@@ -47,7 +39,6 @@ export async function GET() {
         { model: Service },
         { model: Location }
       ],
-      limit: 100
     });
 
     if (serviceLocations.length > 0) {

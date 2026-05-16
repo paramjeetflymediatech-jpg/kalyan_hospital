@@ -62,7 +62,7 @@ export default async function sitemap() {
       lastModified: blog.updatedAt || new Date(),
     }));
     
-    return [...staticPages, ...statePages, ...servicePages, ...locationPages, ...blogPages];
+    return [...staticPages, ...locationPages, ...blogPages];
   } catch (error) {
     console.error('Error generating dynamic sitemap:', error);
     return [{ url: baseUrl, lastModified: new Date() }];

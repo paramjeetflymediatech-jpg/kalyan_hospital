@@ -1,5 +1,7 @@
 import { Orbitron, Outfit, Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
+import { getPageMetadata } from "@/lib/seo";
+import RenderTags from "@/components/RenderTags";
 
 const orbitron = Orbitron({
   subsets: ["latin"],
@@ -23,29 +25,24 @@ const inter = Inter({
 
 export const metadata = {
   title: "Kalyan Robotic Hospital | Punjab's Future of AI Robotic Knee Replacement",
-  description: "Experience the world's most advanced AI-powered robotic knee replacement surgery at Kalyan Robotic Hospital. Precision, faster recovery, and personalized care.",
-  icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon.ico',
-    apple: '/favicon.ico',
-  },
+  description: "Experience the world's most advanced AI-powered robotic knee replacement surgery at Kalyan Hospital.",
 };
 
-import { getPageMetadata } from "@/lib/seo";
-import DynamicScripts from "@/components/DynamicScripts";
-
 export default async function RootLayout({ children }) {
-  const globalSeo = await getPageMetadata('GLOBAL');
+  const seoData = await getPageMetadata('GLOBAL');
   
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* Global Header Scripts */}
+        <RenderTags tags={seoData?.global_header_tags} useStandardTags={true} />
+        {/* Global Footer Scripts (Moved to head as per user request) */}
+        <RenderTags tags={seoData?.global_footer_tags} useStandardTags={true} />
+      </head>
       <body
         className={`${orbitron.variable} ${outfit.variable} ${spaceGrotesk.variable} ${inter.variable} antialiased`}
       >
-        <DynamicScripts 
-          globalHeader={globalSeo?.header_scripts} 
-          globalFooter={globalSeo?.footer_scripts} 
-        />
         {children}
       </body>
     </html>

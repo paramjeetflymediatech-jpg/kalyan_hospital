@@ -378,31 +378,27 @@ export default function SeoManager() {
                   </div>
                 </div>
 
-                {selectedPath === 'GLOBAL' && (
-                  <>
-                    <div className="space-y-2">
-                      <label className="text-xs uppercase tracking-widest text-primary font-space">Header Scripts (GTM, Analytics, etc.)</label>
-                      <textarea
-                        rows="6"
-                        value={formData.header_scripts}
-                        onChange={(e) => setFormData({ ...formData, header_scripts: e.target.value })}
-                        className="w-full bg-white/5 border border-primary/20 rounded-xl py-4 px-6 text-white focus:border-primary transition-all outline-none font-mono text-[10px]"
-                        placeholder="<!-- Paste scripts for <head> here -->"
-                      ></textarea>
-                    </div>
+                <div className="space-y-2">
+                  <label className="text-xs uppercase tracking-widest text-primary font-space">Header Scripts (GTM, Analytics, etc.)</label>
+                  <textarea
+                    rows="6"
+                    value={formData.header_scripts}
+                    onChange={(e) => setFormData({ ...formData, header_scripts: e.target.value })}
+                    className="w-full bg-white/5 border border-primary/20 rounded-xl py-4 px-6 text-white focus:border-primary transition-all outline-none font-mono text-[10px]"
+                    placeholder="<!-- Paste scripts for <head> here -->"
+                  ></textarea>
+                </div>
 
-                    <div className="space-y-2">
-                      <label className="text-xs uppercase tracking-widest text-primary font-space">Footer Scripts (Pixels, Chat, etc.)</label>
-                      <textarea
-                        rows="6"
-                        value={formData.footer_scripts}
-                        onChange={(e) => setFormData({ ...formData, footer_scripts: e.target.value })}
-                        className="w-full bg-white/5 border border-primary/20 rounded-xl py-4 px-6 text-white focus:border-primary transition-all outline-none font-mono text-[10px]"
-                        placeholder="<!-- Paste scripts for end of <body> here -->"
-                      ></textarea>
-                    </div>
-                  </>
-                )}
+                <div className="space-y-2">
+                  <label className="text-xs uppercase tracking-widest text-primary font-space">Footer Scripts (Pixels, Chat, etc. - Now in head)</label>
+                  <textarea
+                    rows="6"
+                    value={formData.footer_scripts}
+                    onChange={(e) => setFormData({ ...formData, footer_scripts: e.target.value })}
+                    className="w-full bg-white/5 border border-primary/20 rounded-xl py-4 px-6 text-white focus:border-primary transition-all outline-none font-mono text-[10px]"
+                    placeholder="<!-- These will also be placed in the <head> as requested -->"
+                  ></textarea>
+                </div>
 
                 <div className="pt-4">
                   <button

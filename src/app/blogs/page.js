@@ -1,21 +1,13 @@
 import Navbar from '@/components/Navbar';
 export const dynamic = 'force-dynamic';
 import Footer from '@/components/Footer';
-import { getPageMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import { Calendar, User, ArrowRight } from 'lucide-react';
 
 import Blog from '@/models/Blog';
-
-export async function generateMetadata() {
-  const metadata = await getPageMetadata('/blogs');
-  return metadata || {
-    title: "Medical Insights & Robotic Advancements | Kalyan Hospital Blog",
-    description: "Stay updated with the latest in robotic surgery, orthopedic care, and medical innovations from our experts.",
-  };
-}
-
 import BlogInfiniteList from '@/components/BlogInfiniteList';
+
+// Metadata and Scripts are now handled universally in layout.js
 
 async function getBlogs() {
   try {
@@ -33,13 +25,9 @@ async function getBlogs() {
 
 export default async function BlogListPage() {
   const { rows, count } = await getBlogs();
-  const seoData = await getPageMetadata('/blogs');
 
   return (
     <main className="min-h-screen bg-[#0a0a0a]">
-      {seoData?.header_scripts && (
-        <div dangerouslySetInnerHTML={{ __html: seoData.header_scripts }} />
-      )}
       <Navbar />
       
       {/* Hero Section */}

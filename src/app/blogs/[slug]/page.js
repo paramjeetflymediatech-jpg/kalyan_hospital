@@ -9,6 +9,7 @@ import SidebarContactForm from '@/components/SidebarContactForm';
 
 import Blog from '@/models/Blog';
 
+// Metadata is kept here because it uses dynamic blog content as a fallback
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const blog = await Blog.findOne({ where: { slug, status: 'published' } });
@@ -53,8 +54,6 @@ export default async function BlogDetailPage({ params }) {
 
   if (!blog) notFound();
 
-  const seoData = await getPageMetadata(`/blogs/${slug}`);
-
   const blogSchema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -98,6 +97,7 @@ export default async function BlogDetailPage({ params }) {
 
   return (
     <main className="min-h-screen bg-[#0a0a0a]">
+      {/* JSON-LD Schemas are kept in the page as they are content-specific */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
@@ -110,10 +110,6 @@ export default async function BlogDetailPage({ params }) {
         />
       )}
       
-      {seoData?.header_scripts && (
-        <div dangerouslySetInnerHTML={{ __html: seoData.header_scripts }} />
-      )}
-
       <Navbar />
       
       <article className="pt-32 pb-32">
@@ -181,7 +177,6 @@ export default async function BlogDetailPage({ params }) {
               )}
             </div>
 
-            
             {/* Sidebar Column */}
             <aside className="lg:col-span-4">
               <SidebarContactForm />
