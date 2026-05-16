@@ -10,6 +10,7 @@ export async function getPageMetadata(path) {
       Seo.findOne({ where: { page_path: 'GLOBAL' } })
     ]);
 
+    console.log(pageData,'pagedata',globalData,'globalData')
     const page = pageData ? pageData.toJSON() : {};
     const global = globalData ? globalData.toJSON() : {};
 

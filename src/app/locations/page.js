@@ -6,6 +6,7 @@ import { MapPin } from 'lucide-react';
 
 export async function generateMetadata() {
   const metadata = await getPageMetadata('/locations');
+  console.log(metadata,'ssss')
   return metadata || {
     title: "Best Robotic Surgery in India | Our Service Locations",
     description: "Explore the best robotic knee and spine surgery services available across India. Find the nearest Kalyan Robotic Hospital hub.",
