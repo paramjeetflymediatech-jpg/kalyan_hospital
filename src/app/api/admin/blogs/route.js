@@ -4,8 +4,21 @@ import { verifyToken } from '@/lib/auth';
 
 export async function GET(request) {
   try {
-    const blogs = await Blog.findAll({ order: [['created_at', 'DESC']] });
-    return NextResponse.json({ success: true, data: blogs });
+    const { searchParams } = new URL(request.url);
+    const limit = parseInt(searchParams.get('limit')) || 10;
+    const offset = parseInt(searchParams.get('offset')) || 0;
+
+    const blogs = await Blog.findAndCountAll({ 
+      order: [['created_at', 'DESC']],
+      limit,
+      offset
+    });
+    
+    return NextResponse.json({ 
+      success: true, 
+      data: blogs.rows,
+      total: blogs.count 
+    });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

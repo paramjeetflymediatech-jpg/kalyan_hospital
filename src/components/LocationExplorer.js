@@ -9,11 +9,11 @@ export default function LocationExplorer() {
   const [districts, setDistricts] = useState([]);
   const [cities, setCities] = useState([]);
   const [services, setServices] = useState([]);
-  
+
   const [selectedState, setSelectedState] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('');
   const [selectedCityId, setSelectedCityId] = useState('');
-  
+
   const [loading, setLoading] = useState({ states: true, districts: false, cities: false, services: false });
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function LocationExplorer() {
   const fetchStates = async () => {
     try {
       const res = await fetch('/api/states');
-      const data = await res.json(); 
+      const data = await res.json();
       if (data.success) setStates(data.data.filter((state) => state.name === "Punjab" || state.name === "Haryana" || state.name === "Jammu and Kashmir" || state.name === "Himachal Pradesh"));
     } catch (e) { console.error(e); }
     setLoading(prev => ({ ...prev, states: false }));
@@ -91,12 +91,12 @@ export default function LocationExplorer() {
     <div className="w-full space-y-12">
       {/* Search Controls */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 p-8 glassmorphism rounded-[40px] border border-white/10 shadow-[0_0_50px_rgba(255,0,51,0.1)]">
-        
+
         {/* State Select */}
         <div className="space-y-3">
           <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary px-2">Select State</label>
           <div className="relative">
-            <select 
+            <select
               value={selectedState}
               onChange={(e) => setSelectedState(e.target.value)}
               className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white appearance-none focus:border-primary transition-all font-orbitron text-sm uppercase tracking-wider"
@@ -112,7 +112,7 @@ export default function LocationExplorer() {
         <div className={`space-y-3 transition-all duration-500 ${!selectedState ? 'opacity-20 grayscale pointer-events-none' : ''}`}>
           <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary px-2">Select District</label>
           <div className="relative">
-            <select 
+            <select
               value={selectedDistrict}
               onChange={(e) => setSelectedDistrict(e.target.value)}
               className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white appearance-none focus:border-primary transition-all font-orbitron text-sm uppercase tracking-wider"
@@ -128,7 +128,7 @@ export default function LocationExplorer() {
         <div className={`space-y-3 transition-all duration-500 ${!selectedDistrict ? 'opacity-20 grayscale pointer-events-none' : ''}`}>
           <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary px-2">Select City</label>
           <div className="relative">
-            <select 
+            <select
               value={selectedCityId}
               onChange={(e) => setSelectedCityId(e.target.value)}
               className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white appearance-none focus:border-primary transition-all font-orbitron text-sm uppercase tracking-wider"
@@ -185,8 +185,8 @@ export default function LocationExplorer() {
             </div>
           ) : (
             services.map((svc) => (
-              <Link 
-                key={svc.id} 
+              <Link
+                key={svc.id}
                 href={`/${currentCity.State.slug}/${svc.slug}-in-${currentCity.slug}`}
                 className="group relative glassmorphism rounded-[40px] p-8 border border-white/10 hover:border-primary/40 transition-all duration-500 overflow-hidden"
               >

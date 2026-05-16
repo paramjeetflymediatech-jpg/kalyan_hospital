@@ -8,7 +8,11 @@ import { Plus, Trash2, Edit2, FileText, Calendar, User, Eye, Search, Loader2, Ch
 export default function BlogList() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [search, setSearch] = useState('');
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const loaderRef = useRef(null);
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   const showToast = (message, type = 'success') => {
@@ -17,18 +21,54 @@ export default function BlogList() {
   };
 
   useEffect(() => {
-    fetchBlogs();
+    fetchBlogs(true);
   }, []);
 
-  const fetchBlogs = async () => {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting && hasMore && !loading && !loadingMore && !search) {
+          fetchBlogs(false);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current);
+      }
+    };
+  }, [hasMore, loading, loadingMore, search, offset]);
+
+  const fetchBlogs = async (initial = false) => {
+    if (initial) setLoading(true);
+    else setLoadingMore(true);
+
     try {
-      const res = await fetch('/api/admin/blogs');
+      const currentOffset = initial ? 0 : offset;
+      const res = await fetch(`/api/admin/blogs?limit=10&offset=${currentOffset}`);
       const data = await res.json();
-      if (data.success) setBlogs(data.data);
+      
+      if (data.success) {
+        if (initial) {
+          setBlogs(data.data);
+          setOffset(data.data.length);
+        } else {
+          setBlogs(prev => [...prev, ...data.data]);
+          setOffset(prev => prev + data.data.length);
+        }
+        setHasMore(offset + data.data.length < data.total);
+      }
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   };
 
@@ -158,12 +198,25 @@ export default function BlogList() {
                 </div>
               </div>
             ))}
-            {filteredBlogs.length === 0 && (
+            {filteredBlogs.length === 0 && !loading && (
               <div className="text-center py-20 border-2 border-dashed border-white/5 rounded-[40px]">
                 <FileText size={48} className="mx-auto text-white/5 mb-4" />
                 <p className="text-sm text-white/20 uppercase tracking-widest font-orbitron">No transmissions found in this sector.</p>
               </div>
             )}
+            
+            {/* Infinite Scroll Trigger */}
+            <div ref={loaderRef} className="py-10 flex flex-col items-center justify-center gap-4">
+               {loadingMore && (
+                 <>
+                   <Loader2 className="animate-spin text-primary" size={24} />
+                   <span className="font-orbitron text-[8px] text-white/20 tracking-[0.3em] uppercase">Fetching Archives...</span>
+                 </>
+               )}
+               {!hasMore && blogs.length > 0 && !search && (
+                 <span className="font-orbitron text-[8px] text-white/10 tracking-[0.3em] uppercase">End of Archive</span>
+               )}
+            </div>
           </div>
         )}
       </div>

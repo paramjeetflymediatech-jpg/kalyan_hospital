@@ -8,7 +8,7 @@ export default function SeoManager() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [pages, setPages] = useState([]);
-  
+
   const selectedPath = searchParams.get('path') || 'GLOBAL';
 
   const setSelectedPath = (path) => {
@@ -22,7 +22,7 @@ export default function SeoManager() {
   const [newPath, setNewPath] = useState('');
   const [oldPath, setOldPath] = useState(null);
   const [isRenaming, setIsRenaming] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -77,16 +77,16 @@ export default function SeoManager() {
           canonical_url: result.data.canonical_url || '',
         });
       } else {
-        setFormData({ 
-          title: '', 
-          description: '', 
-          keywords: '', 
-          og_image: '', 
+        setFormData({
+          title: '',
+          description: '',
+          keywords: '',
+          og_image: '',
           og_title: '',
           og_description: '',
-          header_scripts: '', 
+          header_scripts: '',
           footer_scripts: '',
-          canonical_url: '' 
+          canonical_url: ''
         });
       }
     } catch (error) {
@@ -99,9 +99,9 @@ export default function SeoManager() {
   const handleAddPage = async (e) => {
     e.preventDefault();
     if (!newPath) return;
-    
+
     const formattedPath = newPath.startsWith('/') ? newPath : `/${newPath}`;
-    
+
     // Check if exists
     if (pages.some(p => p.page_path === formattedPath)) {
       alert('This page already exists in the list.');
@@ -114,14 +114,14 @@ export default function SeoManager() {
       await fetch('/api/seo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          page_path: formattedPath, 
+        body: JSON.stringify({
+          page_path: formattedPath,
           title: 'New Page',
           description: '',
           keywords: ''
         }),
       });
-      
+
       setSelectedPath(formattedPath);
       setNewPath('');
       setShowAddModal(false);
@@ -142,17 +142,17 @@ export default function SeoManager() {
       const response = await fetch('/api/seo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          page_path: selectedPath, 
+        body: JSON.stringify({
+          page_path: selectedPath,
           old_path: oldPath, // Send the original path to handle renames
-          ...formData 
+          ...formData
         }),
       });
       const result = await response.json();
       if (result.success) {
         setStatus({ type: 'success', message: 'SEO metadata updated successfully!' });
         setOldPath(selectedPath); // Update oldPath to current after success
-        fetchPages(); 
+        fetchPages();
       } else {
         setStatus({ type: 'error', message: result.error || 'Failed to update SEO metadata.' });
       }
@@ -187,7 +187,7 @@ export default function SeoManager() {
     e.preventDefault();
     if (!newPath) return;
     const formattedPath = newPath.startsWith('/') ? newPath : `/${newPath}`;
-    
+
     // Check if new path already exists
     if (pages.some(p => p.page_path === formattedPath && p.page_path !== selectedPath)) {
       alert('This URL already exists.');
@@ -201,7 +201,7 @@ export default function SeoManager() {
     setShowAddModal(false);
   };
 
-  const filteredPages = pages.filter(p => 
+  const filteredPages = pages.filter(p =>
     p.page_path.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (p.title && p.title.toLowerCase().includes(searchTerm.toLowerCase()))
   );
@@ -213,7 +213,7 @@ export default function SeoManager() {
           <Globe className="text-primary" size={24} />
           <h2 className="font-orbitron font-bold text-2xl">SEO Management</h2>
         </div>
-        <button 
+        <button
           onClick={() => {
             setNewPath('');
             setShowAddModal(true);
@@ -230,8 +230,8 @@ export default function SeoManager() {
         <div className="lg:col-span-1 space-y-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/20" size={16} />
-            <input 
-              type="text" 
+            <input
+              type="text"
               placeholder="Search pages..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -244,20 +244,19 @@ export default function SeoManager() {
               <div key={page.page_path} className="group relative">
                 <button
                   onClick={() => setSelectedPath(page.page_path)}
-                  className={`w-full text-left px-4 py-3 rounded-xl transition-all border ${
-                    selectedPath === page.page_path
+                  className={`w-full text-left px-4 py-3 rounded-xl transition-all border ${selectedPath === page.page_path
                       ? 'bg-primary/20 border-primary text-white shadow-[0_0_20px_rgba(255,0,51,0.1)]'
                       : 'bg-white/5 border-white/5 text-white/60 hover:bg-white/10 hover:border-white/20'
-                  }`}
+                    }`}
                 >
                   <span className="font-orbitron font-bold text-[10px] tracking-wider uppercase block truncate pr-6">
                     {page.page_path === 'GLOBAL' ? '🌍 Global Settings' : page.title || 'Untitled Page'}
                   </span>
                   <p className="text-[9px] opacity-40 mt-1 font-space truncate pr-6">{page.page_path}</p>
                 </button>
-                
+
                 {page.page_path !== 'GLOBAL' && page.page_path !== '/' && (
-                  <button 
+                  <button
                     onClick={(e) => {
                       e.stopPropagation();
                       handleDeletePage(page.page_path);
@@ -423,11 +422,10 @@ export default function SeoManager() {
                 </div>
 
                 {status && (
-                  <div className={`flex items-center gap-4 p-4 rounded-xl border ${
-                    status.type === 'success' 
-                      ? 'bg-green-500/10 border-green-500/20 text-green-400' 
+                  <div className={`flex items-center gap-4 p-4 rounded-xl border ${status.type === 'success'
+                      ? 'bg-green-500/10 border-green-500/20 text-green-400'
                       : 'bg-red-500/10 border-red-500/20 text-red-400'
-                  } animate-in fade-in slide-in-from-top-2`}>
+                    } animate-in fade-in slide-in-from-top-2`}>
                     {status.type === 'success' ? <CheckCircle size={20} /> : <AlertCircle size={20} />}
                     <p className="text-sm font-medium">{status.message}</p>
                   </div>

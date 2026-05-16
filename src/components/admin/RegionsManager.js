@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import 'react-quill-new/dist/quill.snow.css';
-import { MapPin, Plus, Trash2, Edit2, Check, X, ChevronRight, Map, Building2, Stethoscope, Save, FileText, Layout, HelpCircle, MessageSquare } from 'lucide-react';
+import { MapPin, Plus, Trash2, Edit2, Check, X, ChevronRight, Map, Building2, Stethoscope, Save, FileText, Layout, HelpCircle, MessageSquare, Search } from 'lucide-react';
 
 const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
 
@@ -17,9 +17,16 @@ export default function RegionsManager() {
   const [activeDistrict, setActiveDistrict] = useState(null);
   const [activeCity, setActiveCity] = useState(null);
   
-  // Array of { service_id, description, content, faqs: [] }
   const [activeCityServices, setActiveCityServices] = useState([]);
   const [selectedServiceForContent, setSelectedServiceForContent] = useState(null);
+
+  const [showStateDropdown, setShowStateDropdown] = useState(false);
+  const [showDistrictDropdown, setShowDistrictDropdown] = useState(false);
+  const [showCityDropdown, setShowCityDropdown] = useState(false);
+
+  const [searchState, setSearchState] = useState('');
+  const [searchDistrict, setSearchDistrict] = useState('');
+  const [searchCity, setSearchCity] = useState('');
   
   const [loading, setLoading] = useState(true);
   const [savingServices, setSavingServices] = useState(false);
@@ -215,152 +222,223 @@ export default function RegionsManager() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Column 1: States */}
-        <div className="glassmorphism rounded-[40px] border border-white/5 overflow-hidden flex flex-col min-h-[600px]">
-          <div className="p-6 border-b border-white/5 flex items-center justify-between bg-white/5">
-            <h3 className="font-orbitron font-bold text-[10px] tracking-widest uppercase flex items-center gap-2">
-              <MapPin size={14} className="text-primary" /> States
-            </h3>
-            <button onClick={() => setNewItem({ type: 'state', name: '' })} className="p-2 bg-primary/10 hover:bg-primary/20 rounded-lg text-primary transition-all">
-              <Plus size={14} />
-            </button>
-          </div>
-          <div className="flex-1 overflow-y-auto p-3 space-y-2">
-            {newItem.type === 'state' && (
-              <div className="p-3 bg-primary/5 rounded-2xl border border-primary/20 flex items-center gap-2">
-                <input autoFocus className="bg-transparent border-none focus:ring-0 text-xs font-bold w-full uppercase" placeholder="NAME" value={newItem.name} onChange={(e) => setNewItem({...newItem, name: e.target.value})} />
-                <button onClick={() => handleSave('state', { name: newItem.name })} className="p-1 text-green-500"><Check size={16} /></button>
-                <button onClick={() => setNewItem({ type: null })} className="p-1 text-red-500"><X size={16} /></button>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+        {/* State Selector */}
+        <div className="relative z-[40]">
+          <label className="text-[10px] font-black uppercase tracking-[0.3em] text-primary ml-2 mb-2 block">State / Province</label>
+          <div className="glassmorphism rounded-2xl border border-white/10 overflow-hidden">
+            <div 
+              onClick={() => setShowStateDropdown(!showStateDropdown)}
+              className="p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <MapPin size={16} className="text-primary" />
+                <span className="font-orbitron font-bold text-xs uppercase tracking-wider">
+                  {activeState ? activeState.name : 'Select State'}
+                </span>
               </div>
-            )}
-            {states.map(state => (
-              <div key={state.id} className="relative group">
-                {editingItem.type === 'state' && editingItem.id === state.id ? (
-                  <div className="p-3 bg-primary/5 rounded-2xl border border-primary/20 flex items-center gap-2">
-                    <input autoFocus className="bg-transparent border-none focus:ring-0 text-xs font-bold w-full uppercase" value={editingItem.name} onChange={(e) => setEditingItem({...editingItem, name: e.target.value})} />
-                    <button onClick={() => handleSave('state', { id: state.id, name: editingItem.name })} className="p-1 text-green-500"><Check size={16} /></button>
-                    <button onClick={() => setEditingItem({ type: null, id: null })} className="p-1 text-red-500"><X size={16} /></button>
-                  </div>
-                ) : (
-                  <div className={`w-full flex items-center justify-between p-4 rounded-2xl transition-all ${activeState?.id === state.id ? 'glassmorphism text-white' : 'hover:bg-white/5 text-white/60'}`}>
-                    <button onClick={() => setActiveState(state)} className="flex-1 text-left font-orbitron font-bold text-xs uppercase">
-                      {state.name}
-                    </button>
-                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button onClick={(e) => { e.stopPropagation(); setEditingItem({ type: 'state', id: state.id, name: state.name }); }} className="p-1.5 hover:bg-white/20 rounded-lg text-white">
-                        <Edit2 size={12} />
-                      </button>
-                      <button onClick={(e) => { e.stopPropagation(); handleDelete('state', state.id); }} className="p-1.5 hover:bg-red-500/20 rounded-lg text-red-500">
-                        <Trash2 size={12} />
-                      </button>
-                    </div>
-                    {activeState?.id === state.id && <ChevronRight size={16} className="ml-2" />}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
+              <ChevronRight className={`transition-transform duration-300 ${showStateDropdown ? 'rotate-90' : ''}`} size={16} />
+            </div>
 
-        {/* Column 2: Districts */}
-        <div className={`glassmorphism rounded-[40px] border border-white/5 overflow-hidden flex flex-col min-h-[600px] transition-all ${!activeState ? 'opacity-20 grayscale' : ''}`}>
-          <div className="p-6 border-b border-white/5 flex items-center justify-between bg-white/5">
-            <h3 className="font-orbitron font-bold text-[10px] tracking-widest uppercase flex items-center gap-2 text-primary">
-               Districts
-            </h3>
-            <button onClick={() => setNewItem({ type: 'district', name: '' })} className="p-2 bg-primary/10 hover:bg-primary/20 rounded-lg text-primary transition-all">
-              <Plus size={14} />
-            </button>
-          </div>
-          <div className="flex-1 overflow-y-auto p-3 space-y-2">
-            {newItem.type === 'district' && (
-              <div className="p-3 bg-primary/5 rounded-2xl border border-primary/20 flex items-center gap-2">
-                <input autoFocus className="bg-transparent border-none focus:ring-0 text-xs font-bold w-full uppercase" placeholder="NAME" value={newItem.name} onChange={(e) => setNewItem({...newItem, name: e.target.value})} />
-                <button onClick={() => handleSave('district', { name: newItem.name, state_id: activeState.id })} className="p-1 text-green-500"><Check size={16} /></button>
-                <button onClick={() => setNewItem({ type: null })} className="p-1 text-red-500"><X size={16} /></button>
-              </div>
-            )}
-            {districts.map(district => (
-              <div key={district.id} className="relative group">
-                {editingItem.type === 'district' && editingItem.id === district.id ? (
-                  <div className="p-3 bg-primary/5 rounded-2xl border border-primary/20 flex items-center gap-2">
-                    <input autoFocus className="bg-transparent border-none focus:ring-0 text-xs font-bold w-full uppercase" value={editingItem.name} onChange={(e) => setEditingItem({...editingItem, name: e.target.value})} />
-                    <button onClick={() => handleSave('district', { id: district.id, name: editingItem.name, state_id: activeState.id })} className="p-1 text-green-500"><Check size={16} /></button>
-                    <button onClick={() => setEditingItem({ type: null, id: null })} className="p-1 text-red-500"><X size={16} /></button>
-                  </div>
-                ) : (
-                  <div className={`w-full flex items-center justify-between p-4 rounded-2xl transition-all ${activeDistrict?.id === district.id ? 'glassmorphism text-white' : 'hover:bg-white/5 text-white/60'}`}>
-                    <button onClick={() => setActiveDistrict(district)} className="flex-1 text-left font-orbitron font-bold text-xs uppercase">
-                      {district.name}
-                    </button>
-                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button onClick={(e) => { e.stopPropagation(); setEditingItem({ type: 'district', id: district.id, name: district.name }); }} className="p-1.5 hover:bg-white/20 rounded-lg text-white">
-                        <Edit2 size={12} />
-                      </button>
-                      <button onClick={(e) => { e.stopPropagation(); handleDelete('district', district.id); }} className="p-1.5 hover:bg-red-500/20 rounded-lg text-red-500">
-                        <Trash2 size={12} />
-                      </button>
-                    </div>
-                    {activeDistrict?.id === district.id && <ChevronRight size={16} className="ml-2" />}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Column 3: Cities */}
-        <div className={`glassmorphism rounded-[40px] border border-white/5 overflow-hidden flex flex-col min-h-[600px] transition-all ${!activeDistrict ? 'opacity-20 grayscale' : ''}`}>
-          <div className="p-6 border-b border-white/5 flex items-center justify-between bg-white/5">
-            <h3 className="font-orbitron font-bold text-[10px] tracking-widest uppercase flex items-center gap-2 text-primary">
-               Cities
-            </h3>
-            <button onClick={() => setNewItem({ type: 'city', name: '', slug: '' })} className="p-2 bg-primary/10 hover:bg-primary/20 rounded-lg text-primary transition-all">
-              <Plus size={14} />
-            </button>
-          </div>
-          <div className="flex-1 overflow-y-auto p-3 space-y-2">
-            {newItem.type === 'city' && (
-              <div className="p-4 bg-primary/5 rounded-2xl border border-primary/20 space-y-3">
-                <input autoFocus className="bg-transparent border-b border-primary/20 focus:ring-0 text-xs font-bold w-full uppercase" placeholder="CITY NAME" value={newItem.name} onChange={(e) => { const n = e.target.value; setNewItem({...newItem, name: n, slug: n.toLowerCase().replace(/ /g, '-')}); }} />
-                <div className="flex justify-end gap-2">
-                  <button onClick={() => handleSave('city', { name: newItem.name, slug: newItem.slug, state_id: activeState.id, district_id: activeDistrict.id })} className="px-3 py-1 bg-primary rounded-lg text-[10px] font-bold uppercase">Save</button>
-                  <button onClick={() => setNewItem({ type: null })} className="px-3 py-1 bg-white/10 rounded-lg text-[10px] font-bold uppercase">Cancel</button>
+            {showStateDropdown && (
+              <div className="border-t border-white/5 p-2 space-y-2 max-h-[300px] overflow-y-auto">
+                <div className="relative mb-2">
+                  <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/20" />
+                  <input 
+                    className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-8 pr-4 text-[10px] outline-none focus:border-primary"
+                    placeholder="Filter States..."
+                    value={searchState}
+                    onChange={(e) => setSearchState(e.target.value)}
+                  />
                 </div>
+                {states.filter(s => s.name.toLowerCase().includes(searchState.toLowerCase())).map(state => (
+                  <div key={state.id} className="flex items-center justify-between group">
+                    {editingItem.type === 'state' && editingItem.id === state.id ? (
+                      <div className="flex-1 flex items-center gap-2 p-1 bg-white/5 rounded-lg border border-primary/30">
+                        <input autoFocus className="bg-transparent border-none focus:ring-0 text-[10px] font-bold w-full uppercase px-2 py-1" value={editingItem.name} onChange={(e) => setEditingItem({...editingItem, name: e.target.value})} />
+                        <button onClick={() => handleSave('state', { id: state.id, name: editingItem.name })} className="p-1 text-green-500 hover:scale-110 transition-transform"><Check size={14} /></button>
+                        <button onClick={() => setEditingItem({ type: null, id: null })} className="p-1 text-red-500 hover:scale-110 transition-transform"><X size={14} /></button>
+                      </div>
+                    ) : (
+                      <>
+                        <button 
+                          onClick={() => { setActiveState(state); setShowStateDropdown(false); }}
+                          className={`flex-1 text-left px-4 py-2 rounded-lg text-[10px] font-bold uppercase transition-all ${activeState?.id === state.id ? 'bg-primary text-white' : 'hover:bg-white/10 text-white/60'}`}
+                        >
+                          {state.name}
+                        </button>
+                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 px-2 transition-opacity">
+                           <button onClick={(e) => { e.stopPropagation(); setEditingItem({ type: 'state', id: state.id, name: state.name }); }} className="p-1 hover:text-primary"><Edit2 size={10} /></button>
+                           <button onClick={(e) => { e.stopPropagation(); handleDelete('state', state.id); }} className="p-1 hover:text-primary"><Trash2 size={10} /></button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))}
+                <button 
+                  onClick={() => setNewItem({ type: 'state', name: '' })}
+                  className="w-full py-2 bg-primary/10 text-primary rounded-xl text-[10px] font-bold flex items-center justify-center gap-2"
+                >
+                  <Plus size={12} /> Add State
+                </button>
               </div>
             )}
-            {locations.map(city => (
-              <div key={city.id} className="relative group">
-                {editingItem.type === 'city' && editingItem.id === city.id ? (
-                  <div className="p-4 bg-primary/5 rounded-2xl border border-primary/20 space-y-3">
-                    <input autoFocus className="bg-transparent border-b border-primary/20 focus:ring-0 text-xs font-bold w-full uppercase" value={editingItem.name} onChange={(e) => { const n = e.target.value; setEditingItem({...editingItem, name: n, slug: n.toLowerCase().replace(/ /g, '-')}); }} />
-                    <input className="bg-transparent border-none focus:ring-0 text-[10px] w-full text-white/40" value={editingItem.slug} onChange={(e) => setEditingItem({...editingItem, slug: e.target.value})} />
-                    <div className="flex justify-end gap-2">
-                      <button onClick={() => handleSave('city', { id: city.id, name: editingItem.name, slug: editingItem.slug, state_id: activeState.id, district_id: activeDistrict.id })} className="p-1 text-green-500"><Check size={16} /></button>
-                      <button onClick={() => setEditingItem({ type: null, id: null })} className="p-1 text-red-500"><X size={16} /></button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className={`w-full flex items-center justify-between p-4 rounded-2xl transition-all ${activeCity?.id === city.id ? 'glassmorphism text-white' : 'hover:bg-white/5 text-white/60'}`}>
-                    <button onClick={() => setActiveCity(city)} className="flex-1 text-left">
-                      <span className="block font-orbitron font-bold text-xs uppercase">{city.name}</span>
-                      <span className="text-[8px] opacity-40 uppercase tracking-widest">/{city.slug}</span>
-                    </button>
-                    <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button onClick={(e) => { e.stopPropagation(); setEditingItem({ type: 'city', id: city.id, name: city.name, slug: city.slug }); }} className="p-1.5 hover:bg-white/20 rounded-lg text-white">
-                        <Edit2 size={12} />
-                      </button>
-                      <button onClick={(e) => { e.stopPropagation(); handleDelete('city', city.id); }} className="p-1.5 hover:bg-red-500/20 rounded-lg text-red-500">
-                        <Trash2 size={12} />
-                      </button>
-                    </div>
-                    {activeCity?.id === city.id && <ChevronRight size={16} className="ml-2" />}
-                  </div>
-                )}
-              </div>
-            ))}
           </div>
+          {newItem.type === 'state' && (
+             <div className="mt-2 p-3 bg-primary/5 rounded-2xl border border-primary/20 flex items-center gap-2">
+               <input autoFocus className="bg-transparent border-none focus:ring-0 text-xs font-bold w-full uppercase" placeholder="NEW STATE NAME" value={newItem.name} onChange={(e) => setNewItem({...newItem, name: e.target.value})} />
+               <button onClick={() => handleSave('state', { name: newItem.name })} className="p-1 text-green-500"><Check size={16} /></button>
+               <button onClick={() => setNewItem({ type: null })} className="p-1 text-red-500"><X size={16} /></button>
+             </div>
+          )}
+        </div>
+
+        {/* District Selector */}
+        <div className={`relative z-[30] ${!activeState ? 'opacity-20 pointer-events-none' : ''}`}>
+          <label className="text-[10px] font-black uppercase tracking-[0.3em] text-primary ml-2 mb-2 block">District / Region</label>
+          <div className="glassmorphism rounded-2xl border border-white/10 overflow-hidden">
+            <div 
+              onClick={() => setShowDistrictDropdown(!showDistrictDropdown)}
+              className="p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <Building2 size={16} className="text-primary" />
+                <span className="font-orbitron font-bold text-xs uppercase tracking-wider">
+                  {activeDistrict ? activeDistrict.name : 'Select District'}
+                </span>
+              </div>
+              <ChevronRight className={`transition-transform duration-300 ${showDistrictDropdown ? 'rotate-90' : ''}`} size={16} />
+            </div>
+
+            {showDistrictDropdown && (
+              <div className="border-t border-white/5 p-2 space-y-2 max-h-[300px] overflow-y-auto">
+                <div className="relative mb-2">
+                  <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/20" />
+                  <input 
+                    className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-8 pr-4 text-[10px] outline-none focus:border-primary"
+                    placeholder="Filter Districts..."
+                    value={searchDistrict}
+                    onChange={(e) => setSearchDistrict(e.target.value)}
+                  />
+                </div>
+                {districts.filter(d => d.name.toLowerCase().includes(searchDistrict.toLowerCase())).map(district => (
+                  <div key={district.id} className="flex items-center justify-between group">
+                    {editingItem.type === 'district' && editingItem.id === district.id ? (
+                      <div className="flex-1 flex items-center gap-2 p-1 bg-white/5 rounded-lg border border-primary/30">
+                        <input autoFocus className="bg-transparent border-none focus:ring-0 text-[10px] font-bold w-full uppercase px-2 py-1" value={editingItem.name} onChange={(e) => setEditingItem({...editingItem, name: e.target.value})} />
+                        <button onClick={() => handleSave('district', { id: district.id, name: editingItem.name, state_id: activeState.id })} className="p-1 text-green-500 hover:scale-110 transition-transform"><Check size={14} /></button>
+                        <button onClick={() => setEditingItem({ type: null, id: null })} className="p-1 text-red-500 hover:scale-110 transition-transform"><X size={14} /></button>
+                      </div>
+                    ) : (
+                      <>
+                        <button 
+                          onClick={() => { setActiveDistrict(district); setShowDistrictDropdown(false); }}
+                          className={`flex-1 text-left px-4 py-2 rounded-lg text-[10px] font-bold uppercase transition-all ${activeDistrict?.id === district.id ? 'bg-primary text-white' : 'hover:bg-white/10 text-white/60'}`}
+                        >
+                          {district.name}
+                        </button>
+                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 px-2 transition-opacity">
+                           <button onClick={(e) => { e.stopPropagation(); setEditingItem({ type: 'district', id: district.id, name: district.name }); }} className="p-1 hover:text-primary"><Edit2 size={10} /></button>
+                           <button onClick={(e) => { e.stopPropagation(); handleDelete('district', district.id); }} className="p-1 hover:text-primary"><Trash2 size={10} /></button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))}
+                <button 
+                  onClick={() => setNewItem({ type: 'district', name: '' })}
+                  className="w-full py-2 bg-primary/10 text-primary rounded-xl text-[10px] font-bold flex items-center justify-center gap-2"
+                >
+                  <Plus size={12} /> Add District
+                </button>
+              </div>
+            )}
+          </div>
+          {newItem.type === 'district' && (
+             <div className="mt-2 p-3 bg-primary/5 rounded-2xl border border-primary/20 flex items-center gap-2">
+               <input autoFocus className="bg-transparent border-none focus:ring-0 text-xs font-bold w-full uppercase" placeholder="NEW DISTRICT NAME" value={newItem.name} onChange={(e) => setNewItem({...newItem, name: e.target.value})} />
+               <button onClick={() => handleSave('district', { name: newItem.name, state_id: activeState.id })} className="p-1 text-green-500"><Check size={16} /></button>
+               <button onClick={() => setNewItem({ type: null })} className="p-1 text-red-500"><X size={16} /></button>
+             </div>
+          )}
+        </div>
+
+        {/* City Selector */}
+        <div className={`relative z-[20] ${!activeDistrict ? 'opacity-20 pointer-events-none' : ''}`}>
+          <label className="text-[10px] font-black uppercase tracking-[0.3em] text-primary ml-2 mb-2 block">City / Center</label>
+          <div className="glassmorphism rounded-2xl border border-white/10 overflow-hidden">
+            <div 
+              onClick={() => setShowCityDropdown(!showCityDropdown)}
+              className="p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <MapPin size={16} className="text-primary" />
+                <span className="font-orbitron font-bold text-xs uppercase tracking-wider">
+                  {activeCity ? activeCity.name : 'Select City'}
+                </span>
+              </div>
+              <ChevronRight className={`transition-transform duration-300 ${showCityDropdown ? 'rotate-90' : ''}`} size={16} />
+            </div>
+
+            {showCityDropdown && (
+              <div className="border-t border-white/5 p-2 space-y-2 max-h-[300px] overflow-y-auto">
+                <div className="relative mb-2">
+                  <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/20" />
+                  <input 
+                    className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-8 pr-4 text-[10px] outline-none focus:border-primary"
+                    placeholder="Filter Cities..."
+                    value={searchCity}
+                    onChange={(e) => setSearchCity(e.target.value)}
+                  />
+                </div>
+                {locations.filter(c => c.name.toLowerCase().includes(searchCity.toLowerCase())).map(city => (
+                  <div key={city.id} className="flex items-center justify-between group">
+                    {editingItem.type === 'city' && editingItem.id === city.id ? (
+                      <div className="flex-1 flex flex-col gap-2 p-2 bg-white/5 rounded-lg border border-primary/30">
+                        <input autoFocus className="bg-transparent border-b border-white/10 focus:ring-0 text-[10px] font-bold w-full uppercase py-1" value={editingItem.name} onChange={(e) => setEditingItem({...editingItem, name: e.target.value})} />
+                        <input className="bg-transparent border-none focus:ring-0 text-[8px] w-full text-white/40" value={editingItem.slug} onChange={(e) => setEditingItem({...editingItem, slug: e.target.value})} />
+                        <div className="flex justify-end gap-2">
+                           <button onClick={() => handleSave('city', { id: city.id, name: editingItem.name, slug: editingItem.slug, state_id: activeState.id, district_id: activeDistrict.id })} className="p-1 text-green-500 hover:scale-110 transition-transform"><Check size={14} /></button>
+                           <button onClick={() => setEditingItem({ type: null, id: null })} className="p-1 text-red-500 hover:scale-110 transition-transform"><X size={14} /></button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <button 
+                          onClick={() => { setActiveCity(city); setShowCityDropdown(false); }}
+                          className={`flex-1 text-left px-4 py-2 rounded-lg text-[10px] font-bold uppercase transition-all ${activeCity?.id === city.id ? 'bg-primary text-white' : 'hover:bg-white/10 text-white/60'}`}
+                        >
+                          <div className="flex flex-col">
+                            <span>{city.name}</span>
+                            <span className="text-[8px] opacity-40 lowercase tracking-normal">/{city.slug}</span>
+                          </div>
+                        </button>
+                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 px-2 transition-opacity">
+                           <button onClick={(e) => { e.stopPropagation(); setEditingItem({ type: 'city', id: city.id, name: city.name, slug: city.slug }); }} className="p-1 hover:text-primary"><Edit2 size={10} /></button>
+                           <button onClick={(e) => { e.stopPropagation(); handleDelete('city', city.id); }} className="p-1 hover:text-primary"><Trash2 size={10} /></button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))}
+                <button 
+                  onClick={() => setNewItem({ type: 'city', name: '', slug: '' })}
+                  className="w-full py-2 bg-primary/10 text-primary rounded-xl text-[10px] font-bold flex items-center justify-center gap-2"
+                >
+                  <Plus size={12} /> Add City
+                </button>
+              </div>
+            )}
+          </div>
+          {newItem.type === 'city' && (
+             <div className="mt-2 p-4 bg-primary/5 rounded-2xl border border-primary/20 space-y-3">
+               <input autoFocus className="bg-transparent border-b border-primary/20 focus:ring-0 text-xs font-bold w-full uppercase" placeholder="CITY NAME" value={newItem.name} onChange={(e) => { const n = e.target.value; setNewItem({...newItem, name: n, slug: n.toLowerCase().replace(/ /g, '-')}); }} />
+               <div className="flex justify-end gap-2">
+                 <button onClick={() => handleSave('city', { name: newItem.name, slug: newItem.slug, state_id: activeState.id, district_id: activeDistrict.id })} className="px-3 py-1 bg-primary rounded-lg text-[10px] font-bold uppercase">Save</button>
+                 <button onClick={() => setNewItem({ type: null })} className="px-3 py-1 bg-white/10 rounded-lg text-[10px] font-bold uppercase">Cancel</button>
+               </div>
+             </div>
+          )}
         </div>
 
         {/* Column 4: Local Services */}

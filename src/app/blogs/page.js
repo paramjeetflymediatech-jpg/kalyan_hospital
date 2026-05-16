@@ -15,22 +15,24 @@ export async function generateMetadata() {
   };
 }
 
+import BlogInfiniteList from '@/components/BlogInfiniteList';
+
 async function getBlogs() {
   try {
-    const blogs = await Blog.findAll({
+    const { rows, count } = await Blog.findAndCountAll({
       where: { status: 'published' },
       order: [['published_at', 'DESC']],
       limit: 12
     });
-    return blogs;
+    return { rows: JSON.parse(JSON.stringify(rows)), count };
   } catch (err) {
     console.error(err);
-    return [];
+    return { rows: [], count: 0 };
   }
 }
 
 export default async function BlogListPage() {
-  const blogs = await getBlogs();
+  const { rows, count } = await getBlogs();
   const seoData = await getPageMetadata('/blogs');
 
   return (
@@ -54,56 +56,11 @@ export default async function BlogListPage() {
         </div>
       </section>
 
-      {/* Blog Grid */}
+      {/* Blog Grid with Infinite Scroll */}
       <section className="max-w-7xl mx-auto px-6 pb-32">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogs.map((blog) => (
-            <Link 
-              key={blog.id} 
-              href={`/blogs/${blog.slug}`}
-              className="group glassmorphism rounded-[40px] border border-white/5 overflow-hidden flex flex-col hover:border-primary/40 transition-all duration-500"
-            >
-              {/* Image Container */}
-              <div className="aspect-[16/10] overflow-hidden relative">
-                {blog.image ? (
-                  <img 
-                    src={blog.image} 
-                    alt={blog.title} 
-                    className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700" 
-                  />
-                ) : (
-                  <div className="w-full h-full bg-white/5 flex items-center justify-center">
-                    <span className="font-orbitron text-white/10 text-xs tracking-widest">NO VISUAL DATA</span>
-                  </div>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent opacity-60" />
-                 
-              </div>
+        <BlogInfiniteList initialBlogs={rows} total={count} />
 
-              {/* Content */}
-              <div className="p-8 flex flex-col flex-grow space-y-4">
-                <div className="flex items-center gap-4 text-[10px] text-white/30 uppercase tracking-widest font-space">
-                  <span className="flex items-center gap-1"><Calendar size={12} /> {new Date(blog.published_at || blog.createdAt).toLocaleDateString()}</span>
-                  <span className="flex items-center gap-1"><User size={12} /> {blog.author}</span>
-                </div>
-
-                <h3 className="font-orbitron font-bold text-xl uppercase tracking-tight leading-tight group-hover:text-primary transition-colors">
-                  {blog.title}
-                </h3>
-
-                <p className="text-sm text-white/40 line-clamp-3 font-space leading-relaxed">
-                  {blog.excerpt || 'Read our latest insights into clinical excellence and robotic precision...'}
-                </p>
-
-                <div className="pt-4 mt-auto flex items-center gap-2 text-primary text-[10px] font-black uppercase tracking-[0.3em]">
-                   READ TRANSMISSION <ArrowRight size={14} className="group-hover:translate-x-2 transition-transform" />
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {blogs.length === 0 && (
+        {rows.length === 0 && (
           <div className="text-center py-32 space-y-6">
             <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto">
               <span className="text-3xl">📡</span>
