@@ -45,4 +45,9 @@ const ServiceLocation = sequelize.define('ServiceLocation', {
 Service.belongsToMany(Location, { through: ServiceLocation, foreignKey: 'service_id' });
 Location.belongsToMany(Service, { through: ServiceLocation, foreignKey: 'location_id' });
 
+ServiceLocation.belongsTo(Service, { foreignKey: 'service_id' });
+ServiceLocation.belongsTo(Location, { foreignKey: 'location_id' });
+Service.hasMany(ServiceLocation, { foreignKey: 'service_id' });
+Location.hasMany(ServiceLocation, { foreignKey: 'location_id' });
+
 export default ServiceLocation;

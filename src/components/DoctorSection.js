@@ -9,7 +9,7 @@ const doctors = [
   {
     name: "Dr. Rajinder Singh",
     title: "Pioneer Robotic Knee Replacement Doctor in India",
-    specialty: "Robotic Joint Replacement",
+    specialty: "Pioneer Robotic Knee Replacement Doctor in India",
     experience: "30+ Years",
     surgeries: "30,000+",
     image: "/doctors/pp.png",

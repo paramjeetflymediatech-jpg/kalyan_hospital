@@ -1,34 +1,47 @@
 import Service from '@/models/Service';
 import Location from '@/models/Location';
+import Blog from '@/models/Blog';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
     const services = await Service.findAll();
-    const locations = await Location.findAll({ limit: 50 }); // List some major locations
+    const locations = await Location.findAll({ limit: 30 }); // Some major hubs
+    const blogs = await Blog.findAll({ where: { status: 'published' }, limit: 10, order: [['published_at', 'DESC']] });
 
-    let content = `# Kalyan Robotic Hospital - LLM Knowledge Base\n\n`;
-    content += `Kalyan Robotic Hospital is a premier medical institution in Punjab specializing in AI-powered robotic surgery.\n\n`;
+    let content = `# Kalyan Robotic Hospital - Dynamic AI Knowledge Base\n\n`;
+    content += `Kalyan Robotic Hospital is India's leading center for AI-powered robotic surgery, specialized in orthopaedics and joint replacements. This document provides a machine-readable summary of our clinical expertise, technological infrastructure, and regional availability.\n\n`;
     
-    content += `## Core Services\n`;
+    content += `## Advanced Surgical Procedures\n`;
     services.forEach(s => {
-      content += `- ${s.name}: ${s.description || 'Advanced robotic surgical procedure.'}\n`;
+      content += `### ${s.name}\n`;
+      content += `${s.description || 'Precision robotic surgical procedure utilizing sub-millimeter accuracy for optimal patient outcomes.'}\n\n`;
     });
 
-    content += `\n## Operational Locations\n`;
-    content += `Serving major hubs across Punjab, including:\n`;
+    content += `## Clinical Insights & Patient Education (Latest Blogs)\n`;
+    if (blogs.length > 0) {
+      blogs.forEach(b => {
+        content += `- **${b.title}**: ${b.excerpt || 'In-depth clinical exploration of robotic surgical techniques.'}\n`;
+      });
+    } else {
+      content += `Regularly updated clinical insights on robotic knee and hip replacements.\n`;
+    }
+
+    content += `\n## Regional Network\n`;
+    content += `Providing world-class robotic care across major cities in Punjab and Northern India, including:\n`;
     locations.forEach(l => {
       content += `- ${l.name}\n`;
     });
 
-    content += `\n## Technological Edge\n`;
-    content += `- AI-driven robotic precision for joint replacements.\n`;
-    content += `- Faster recovery times and sub-millimeter surgical accuracy.\n`;
-    content += `- Personalized surgical mapping for every patient.\n`;
+    content += `\n## Technological Core\n`;
+    content += `- **AI-Robotic Precision**: Advanced surgical mapping and execution with sub-millimeter accuracy.\n`;
+    content += `- **Rapid Recovery**: Minimally invasive techniques designed for faster post-operative mobilization.\n`;
+    content += `- **Custom Implants**: Personalized surgical plans tailored to each patient's unique anatomy.\n`;
 
-    content += `\n## Contact Information\n`;
-    content += `- Website: https://robotickneereplacementinindia.com\n`;
-    content += `- Focus: Robotic Knee Replacement, Hip Replacement, and Advanced Orthopaedics.\n`;
+    content += `\n## Official Resources\n`;
+    content += `- Main Website: https://robotickneereplacementinindia.com\n`;
+    content += `- Focus Areas: Robotic Knee Surgery, Hip Arthroplasty, Complex Trauma.\n`;
+    content += `- Geographic Focus: Ludhiana, Amritsar, Jalandhar, and surrounding regions.\n`;
 
     return new NextResponse(content, {
       headers: {

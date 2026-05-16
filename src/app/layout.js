@@ -24,6 +24,11 @@ const inter = Inter({
 export const metadata = {
   title: "Kalyan Robotic Hospital | Punjab's Future of AI Robotic Knee Replacement",
   description: "Experience the world's most advanced AI-powered robotic knee replacement surgery at Kalyan Robotic Hospital. Precision, faster recovery, and personalized care.",
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
 };
 
 import { getPageMetadata } from "@/lib/seo";

@@ -2,6 +2,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { getPageMetadata } from '@/lib/seo';
 import { ShieldCheck, Target, Users, Zap } from 'lucide-react';
+import Image from 'next/image';
 
 export async function generateMetadata() {
   const metadata = await getPageMetadata('/about');
@@ -63,7 +64,7 @@ export default function AboutPage() {
           <div className="lg:w-1/2">
             <div className="relative aspect-video w-full glassmorphism rounded-[40px] overflow-hidden border border-white/10 p-2">
                <div className="absolute inset-0 bg-primary/10 flex items-center justify-center">
-                  <span className="font-orbitron font-black text-white/20 text-4xl">HOSPITAL VISION</span>
+                  <Image src="/aboutH.png" className='object-contain' alt="Hospital Vision" fill />
                </div>
             </div>
           </div>

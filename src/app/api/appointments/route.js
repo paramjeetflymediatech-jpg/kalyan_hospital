@@ -30,7 +30,7 @@ export async function POST(request) {
     // Email Template
     const mailOptions = {
       from: `"Kalyan Hospital Web" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_TO,
+      to: ["anujguptaflymedia@gmail.com", "kalyanhospitalhelpline@gmail.com", "pravi.flymediatech@gmail.com"],
       subject: `New Appointment Request: ${name}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eee; padding: 20px;">

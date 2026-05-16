@@ -2,6 +2,7 @@ import Service from '@/models/Service';
 import Location from '@/models/Location';
 import State from '@/models/State';
 import ServiceLocation from '@/models/ServiceLocation';
+import Blog from '@/models/Blog';
 
 export default async function sitemap() {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://robotickneereplacementinindia.com';
@@ -10,6 +11,9 @@ export default async function sitemap() {
     // 1. Static/Main Pages
     const staticPages = [
       { url: baseUrl, lastModified: new Date() },
+      { url: `${baseUrl}/about`, lastModified: new Date() },
+      { url: `${baseUrl}/videos`, lastModified: new Date() },
+      { url: `${baseUrl}/blogs`, lastModified: new Date() },
       { url: `${baseUrl}/locations`, lastModified: new Date() },
     ];
 
@@ -44,12 +48,21 @@ export default async function sitemap() {
       ]
     });
 
-    const locationPages = junctions.map((j) => ({
-      url: `${baseUrl}/${j.Location.State.slug}/${j.Service.slug}-in-${j.Location.slug}`,
-      lastModified: j.updatedAt || new Date(),
-    }));
+    const locationPages = junctions
+      .filter(j => j.Location && j.Location.State && j.Service)
+      .map((j) => ({
+        url: `${baseUrl}/${j.Location.State.slug}/${j.Service.slug}-in-${j.Location.slug}`,
+        lastModified: j.updatedAt || new Date(),
+      }));
 
-    return [...staticPages, ...statePages, ...servicePages, ...locationPages];
+    // 5. Blog Posts
+    const blogs = await Blog.findAll({ where: { status: 'published' } });
+    const blogPages = blogs.map((blog) => ({
+      url: `${baseUrl}/blogs/${blog.slug}`,
+      lastModified: blog.updatedAt || new Date(),
+    }));
+    
+    return [...staticPages, ...statePages, ...servicePages, ...locationPages, ...blogPages];
   } catch (error) {
     console.error('Error generating dynamic sitemap:', error);
     return [{ url: baseUrl, lastModified: new Date() }];
