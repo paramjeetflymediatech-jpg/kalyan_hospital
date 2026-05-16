@@ -8,12 +8,6 @@ import State from '@/models/State';
 export async function GET() {
   try {
     const services = await Service.findAll();
-    const serviceLocations = await ServiceLocation.findAll({
-      include: [
-        { model: Location, include: [{ model: State }] },
-        { model: Service }
-      ],
-    });
     const locations = await Location.findAll({ limit: 30 }); // Some major hubs
     const blogs = await Blog.findAll({ where: { status: 'published' }, limit: 10, order: [['published_at', 'DESC']] });
 
@@ -35,13 +29,6 @@ export async function GET() {
       content += `Regularly updated clinical insights on robotic knee and hip replacements.\n`;
     }
     
-    serviceLocations.forEach((serviceLocation,index) => { 
-      console.log(services[index].name,'inddex')
-      if(serviceLocation.service_id==services[index].id){
-        content += `### ${services[index].name} in ${serviceLocation.location.name}, ${serviceLocation.location.state.name}\n`;
-      }
-      content += `${serviceLocation.description || 'Precision robotic surgical procedure utilizing sub-millimeter accuracy for optimal patient outcomes.'}\n\n`;
-    });
 
     content += `\n## Regional Network\n`;
     content += `Providing world-class robotic care across major cities in Punjab and Northern India, including:\n`;
