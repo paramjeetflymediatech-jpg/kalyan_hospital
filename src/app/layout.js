@@ -1,8 +1,7 @@
 import { Orbitron, Outfit, Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
-import { getPageMetadata } from "@/lib/seo";
-import RenderTags from "@/components/RenderTags";
-
+import { getPageMetadata, getPageMetadataSync } from "@/lib/seo";
+import HeadScript from "@/components/Seo/HeadScript"; 
 const orbitron = Orbitron({
   subsets: ["latin"],
   variable: "--font-orbitron",
@@ -26,7 +25,7 @@ const inter = Inter({
 export async function generateMetadata() {
   const seoData = await getPageMetadata('GLOBAL');
   if (!seoData) return {};
-  
+
   return {
     title: seoData.title,
     description: seoData.description,
@@ -37,17 +36,22 @@ export async function generateMetadata() {
   };
 }
 
-export default async function RootLayout({ children }) {
-  const seoData = await getPageMetadata('GLOBAL');
-  
+function GlobalScripts({ position }) {
+  const seoData = getPageMetadataSync('GLOBAL');
+  if (!seoData) return null;
+  if (position === 'header') {
+    return <HeadScript html={seoData.global_header} />;
+  } else {
+    return <HeadScript html={seoData.global_footer} />;
+  }
+}
+
+export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {/* Global Header Scripts */}
-        <RenderTags tags={seoData?.global_header_tags} useStandardTags={true} />
-        {/* Global Footer Scripts (Moved to head as per user request) */}
-        <RenderTags tags={seoData?.global_footer_tags} useStandardTags={true} />
+        <GlobalScripts position="header" />
+        <GlobalScripts position="footer" />
       </head>
       <body
         className={`${orbitron.variable} ${outfit.variable} ${spaceGrotesk.variable} ${inter.variable} antialiased`}

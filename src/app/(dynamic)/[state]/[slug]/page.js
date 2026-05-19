@@ -9,7 +9,8 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { CheckCircle2, Phone, Calendar, ArrowRight, ShieldCheck, Layout, Stethoscope, Check, HelpCircle, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
-import RenderTags from '@/components/RenderTags';
+import HeadScript from '@/components/Seo/HeadScript';
+import FAQschema from '@/components/Seo/FAQschema';
 
 // Metadata is handled universaly in layout.js, but keep generateMetadata if we want specific params handling
 export async function generateMetadata({ params }) {
@@ -94,14 +95,8 @@ async function ServiceInLocationPage({ service, location, junction, seoData }) {
 
   return (
     <main className="min-h-screen bg-[#050505] text-white">
-      {/* Page-specific Scripts */}
-      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
-      
-      {/* Dynamic FAQ Schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <HeadScript html={seoData?.page_header} />
+      <FAQschema faqs={faqs.map(f => ({ question: f.q, answer: f.a }))} />
       
       <Navbar />
       <Hero service={service} location={location} junction={junction} />
@@ -183,7 +178,9 @@ async function ServiceInLocationPage({ service, location, junction, seoData }) {
       </div>
 
       <Footer />
-      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
+      {seoData?.page_footer && (
+        <div dangerouslySetInnerHTML={{ __html: seoData.page_footer }} />
+      )}
     </main>
   );
 }
@@ -217,13 +214,8 @@ async function ServiceDetailPage({ service, state, seoData }) {
 
   return (
     <main className="min-h-screen bg-[#050505] text-white">
-      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
-      {faqs.length > 0 && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-        />
-      )}
+      <HeadScript html={seoData?.page_header} />
+      <FAQschema faqs={faqs.map(f => ({ question: f.q, answer: f.a }))} />
       <Navbar />
       <section className="pt-40 pb-24 px-6  relative overflow-hidden">
         <div className="absolute inset-0 cyber-grid opacity-10"></div>
@@ -253,7 +245,9 @@ async function ServiceDetailPage({ service, state, seoData }) {
         </div>
       </section>
       <Footer />
-      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
+      {seoData?.page_footer && (
+        <div dangerouslySetInnerHTML={{ __html: seoData.page_footer }} />
+      )}
     </main>
   );
 }
@@ -262,7 +256,7 @@ async function LocationDetailPage({ location, seoData }) {
   const services = await Service.findAll({ limit: 12 });
   return (
     <main className="min-h-screen bg-[#050505] text-white">
-      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
+      <HeadScript html={seoData?.page_header} />
       <Navbar />
       <section className="pt-40 pb-24 px-6 relative overflow-hidden text-center">
         <div className="absolute inset-0 cyber-grid opacity-10"></div>
@@ -289,7 +283,9 @@ async function LocationDetailPage({ location, seoData }) {
         </div>
       </section>
       <Footer />
-      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
+      {seoData?.page_footer && (
+        <div dangerouslySetInnerHTML={{ __html: seoData.page_footer }} />
+      )}
     </main>
   );
 }

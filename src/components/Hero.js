@@ -20,8 +20,8 @@ const Hero = () => {
     <section className="relative min-h-screen py-16 md:py-24 flex items-center pt-24 md:pt-20 overflow-hidden bg-[#00000]">
       {/* Background Image with Overlay */}
       <div
-        className="absolute inset-0 bg-[url('/kalyan_Images/MISSO_4.jpg')] bg-contain bg-center bg-no-repeat opacity-40 scale-110"
-        style={{ filter: 'grayscale(100%) brightness(1)' }}
+        className="absolute inset-0 bg-contain bg-center bg-no-repeat opacity-40 scale-110"
+        style={{ backgroundImage: "url('/kalyan_Images/MISSO_4.jpg')", filter: 'grayscale(100%) brightness(1)' }}
       ></div>
 
       {/* Advanced Cinematic Overlay */}

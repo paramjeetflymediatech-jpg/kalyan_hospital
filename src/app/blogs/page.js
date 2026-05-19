@@ -7,7 +7,7 @@ import { Calendar, User, ArrowRight } from 'lucide-react';
 import Blog from '@/models/Blog';
 import BlogInfiniteList from '@/components/BlogInfiniteList';
 import { getPageMetadata } from '@/lib/seo';
-import RenderTags from '@/components/RenderTags';
+import HeadScript from '@/components/Seo/HeadScript';
 
 export async function generateMetadata() {
   const metadata = await getPageMetadata('/blogs');
@@ -34,7 +34,7 @@ export default async function BlogListPage() {
 
   return (
     <main className="min-h-screen bg-[#0a0a0a]">
-      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
+      <HeadScript html={seoData?.page_header} />
       <Navbar />
       
       {/* Hero Section */}
@@ -66,7 +66,9 @@ export default async function BlogListPage() {
       </section>
 
       <Footer />
-      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
+      {seoData?.page_footer && (
+        <div dangerouslySetInnerHTML={{ __html: seoData.page_footer }} />
+      )}
     </main>
   );
 }

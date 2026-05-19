@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import Seo from '@/models/Seo';
+import { clearSeoCache } from '@/lib/seo';
 
 export async function GET(request) {
   try {
@@ -70,6 +71,8 @@ export async function POST(request) {
       canonical_url
     });
 
+    clearSeoCache();
+
     return NextResponse.json({ 
       success: true, 
       message: created ? 'SEO created' : 'SEO updated',
@@ -90,6 +93,7 @@ export async function DELETE(request) {
     }
 
     await Seo.destroy({ where: { page_path: path } });
+    clearSeoCache();
     return NextResponse.json({ success: true, message: 'SEO metadata deleted' });
   } catch (error) {
     console.error('SEO DELETE Error:', error);

@@ -4,7 +4,7 @@ import { getPageMetadata } from '@/lib/seo';
 import Service from '@/models/Service';
 import Link from 'next/link';
 import { Stethoscope, ArrowRight, CheckCircle2 } from 'lucide-react';
-import RenderTags from '@/components/RenderTags';
+import HeadScript from '@/components/Seo/HeadScript';
 
 export async function generateMetadata() {
   const metadata = await getPageMetadata('/services');
@@ -21,7 +21,7 @@ export default async function ServicesPage() {
   return (
     <main className="min-h-screen bg-[#050505] text-white">
       {/* Page-specific Scripts (SSR / View Source) */}
-      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
+      <HeadScript html={seoData?.page_header} />
 
       <Navbar />
       
@@ -66,7 +66,7 @@ export default async function ServicesPage() {
                   <p className="text-white/40 text-lg leading-relaxed mb-10 line-clamp-3">
                     {svc.description || "Cutting-edge robotic-assisted procedure designed for maximum precision, minimal blood loss, and accelerated patient recovery."}
                   </p>
- 
+  
                   <div className="grid grid-cols-2 gap-4 mb-10">
                     {[
                       "AI Alignment",
@@ -80,7 +80,7 @@ export default async function ServicesPage() {
                       </div>
                     ))}
                   </div>
- 
+  
                   <Link 
                     href="/locations"
                     className="inline-flex items-center gap-3 py-4 px-8 bg-white/5 rounded-2xl border border-white/10 hover:bg-primary/10 hover:border-primary/40 transition-all font-orbitron font-bold text-xs uppercase tracking-widest"
@@ -98,7 +98,9 @@ export default async function ServicesPage() {
       <Footer />
 
       {/* Page-specific Footer Scripts (SSR / View Source) */}
-      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
+      {seoData?.page_footer && (
+        <div dangerouslySetInnerHTML={{ __html: seoData.page_footer }} />
+      )}
     </main>
   );
 }

@@ -8,8 +8,8 @@ import FAQ from '@/components/FAQ';
 import ContactInfo from '@/components/ContactInfo';
 import BookingForm from '@/components/BookingForm';
 import Footer from '@/components/Footer';
-import { getPageMetadata } from '@/lib/seo';
-import RenderTags from '@/components/RenderTags';
+import { getPageMetadata, getPageMetadataSync } from '@/lib/seo';
+import HeadScript from '@/components/Seo/HeadScript';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,15 +18,25 @@ export async function generateMetadata() {
   return metadata || {};
 }
 
-export default async function Home() {
-  const seoData = await getPageMetadata('/');
+function PageScripts() {
+  const seoData = getPageMetadataSync('/');
+  if (!seoData) return null;
+  return (
+    <>
+      <HeadScript html={seoData.page_header} />
+      {seoData.page_footer && (
+        <div dangerouslySetInnerHTML={{ __html: seoData.page_footer }} />
+      )}
+    </>
+  );
+}
 
+export default function Home() {
   return (
     <main className="min-h-screen bg-[#0a0a0a] selection:bg-primary selection:text-white">
-      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
+      <PageScripts />
       <Navbar />
       <Hero />
-      
       <div className="relative">
         <DoctorSection />
         <Benefits />
@@ -38,8 +48,6 @@ export default async function Home() {
       </div>
 
       <Footer />
-      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
-
       <a 
         href="https://wa.me/9199150-48877" 
         target="_blank" 

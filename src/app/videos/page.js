@@ -5,7 +5,7 @@ import { getPageMetadata } from '@/lib/seo';
 import { Play, Film, Video } from 'lucide-react';
 import VideoModel from '@/models/Video';
 import VideoGallery from '@/components/VideoGallery';
-import RenderTags from '@/components/RenderTags';
+import HeadScript from '@/components/Seo/HeadScript';
 
 export async function generateMetadata() {
   const metadata = await getPageMetadata('/videos');
@@ -22,7 +22,7 @@ export default async function VideosPage() {
   return (
     <main className="min-h-screen bg-[#050505] text-white selection:bg-primary">
       {/* Page-specific Scripts (SSR / View Source) */}
-      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
+      <HeadScript html={seoData?.page_header} />
 
       <Navbar />
       
@@ -62,7 +62,9 @@ export default async function VideosPage() {
       <Footer />
 
       {/* Page-specific Footer Scripts (SSR / View Source) */}
-      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
+      {seoData?.page_footer && (
+        <div dangerouslySetInnerHTML={{ __html: seoData.page_footer }} />
+      )}
     </main>
   );
 }

@@ -390,13 +390,13 @@ export default function SeoManager() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest text-primary font-space">Footer Scripts (Pixels, Chat, etc. - Now in head)</label>
+                  <label className="text-xs uppercase tracking-widest text-primary font-space">Footer Scripts (Pixels, Chat, etc. - Globally in footer)</label>
                   <textarea
                     rows="6"
                     value={formData.footer_scripts}
                     onChange={(e) => setFormData({ ...formData, footer_scripts: e.target.value })}
                     className="w-full bg-white/5 border border-primary/20 rounded-xl py-4 px-6 text-white focus:border-primary transition-all outline-none font-mono text-[10px]"
-                    placeholder="<!-- These will also be placed in the <head> as requested -->"
+                    placeholder="<!-- These will be placed in the <footer> tag globally -->"
                   ></textarea>
                 </div>
 

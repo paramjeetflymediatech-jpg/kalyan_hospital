@@ -6,7 +6,9 @@ import { Calendar, User, ArrowLeft, Share2, HelpCircle } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import SidebarContactForm from '@/components/SidebarContactForm';
-import RenderTags from '@/components/RenderTags';
+import HeadScript from '@/components/Seo/HeadScript';
+import FAQschema from '@/components/Seo/FAQschema';
+import JsonLd from '@/components/Seo/Jsonld';
 
 import Blog from '@/models/Blog';
 
@@ -88,34 +90,11 @@ export default async function BlogDetailPage({ params }) {
     faqs = [];
   }
 
-  const faqSchema = faqs.length > 0 ? {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqs.map(f => ({
-      "@type": "Question",
-      "name": f.q,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": f.a
-      }
-    }))
-  } : null;
-
   return (
     <main className="min-h-screen bg-[#0a0a0a]">
-      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
-      {/* JSON-LD Schemas are kept in the page as they are content-specific */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
-      />
-      
-      {faqSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-        />
-      )}
+      <HeadScript html={seoData?.page_header} />
+      <JsonLd schema={blogSchema} />
+      <FAQschema faqs={faqs.map(f => ({ question: f.q, answer: f.a }))} />
       
       <Navbar />
       
@@ -193,7 +172,9 @@ export default async function BlogDetailPage({ params }) {
       </article>
 
       <Footer />
-      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
+      {seoData?.page_footer && (
+        <div dangerouslySetInnerHTML={{ __html: seoData.page_footer }} />
+      )}
     </main>
   );
 }

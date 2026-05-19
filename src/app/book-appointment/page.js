@@ -1,6 +1,6 @@
 import BookingFormPage from '@/components/BookingFormPage';
 import { getPageMetadata } from '@/lib/seo';
-import RenderTags from '@/components/RenderTags';
+import HeadScript from '@/components/Seo/HeadScript';
 
 export async function generateMetadata() {
   const metadata = await getPageMetadata('/book-appointment');
@@ -15,9 +15,11 @@ export default async function Page() {
 
   return (
     <>
-      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
+      <HeadScript html={seoData?.page_header} />
       <BookingFormPage />
-      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
+      {seoData?.page_footer && (
+        <div dangerouslySetInnerHTML={{ __html: seoData.page_footer }} />
+      )}
     </>
   );
 }

@@ -3,7 +3,7 @@ import Footer from '@/components/Footer';
 import { getPageMetadata } from '@/lib/seo';
 import { ShieldCheck, Target, Users, Zap } from 'lucide-react';
 import Image from 'next/image';
-import RenderTags from '@/components/RenderTags';
+import HeadScript from '@/components/Seo/HeadScript';
 
 export async function generateMetadata() {
   const metadata = await getPageMetadata('/about');
@@ -26,7 +26,7 @@ export default async function AboutPage() {
   return (
     <main className="min-h-screen bg-[#050505] text-white">
       {/* Page-specific Scripts (SSR / View Source) */}
-      <RenderTags tags={seoData?.page_header_tags} useStandardTags={true} />
+      <HeadScript html={seoData?.page_header} />
 
       <Navbar />
       
@@ -91,7 +91,9 @@ export default async function AboutPage() {
       <Footer />
 
       {/* Page-specific Footer Scripts (SSR / View Source) */}
-      <RenderTags tags={seoData?.page_footer_tags} useStandardTags={true} />
+      {seoData?.page_footer && (
+        <div dangerouslySetInnerHTML={{ __html: seoData.page_footer }} />
+      )}
     </main>
   );
 }
