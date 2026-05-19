@@ -15,6 +15,7 @@ export async function generateMetadata() {
 
 export default async function AboutPage() {
   const seoData = await getPageMetadata('/about');
+  console.log('seoData', seoData,'about');
 
   const coreValues = [
     { icon: <Target className="text-primary" />, title: "Precision", desc: "Sub-millimeter accuracy in every robotic procedure." },

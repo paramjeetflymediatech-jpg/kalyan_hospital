@@ -67,7 +67,13 @@ async function fetchMetadataFromDb(path) {
     // Raw script strings
     global_header: global.header_scripts || '',
     global_footer: global.footer_scripts || '',
-    page_header: page.header_scripts || '',
+    page_header: page.header_scripts || JSON.stringify({
+      title,
+    description,
+    keywords,
+    alternates: {
+      canonical: canonical,
+    }}),
     page_footer: page.footer_scripts || '',
     
     // Separate tags to avoid duplication between layout and pages
