@@ -1,5 +1,4 @@
 import React from 'react';
-import Script from 'next/script';
 import { parseScriptTags } from '@/lib/script-parser';
 
 export default function HeadScript({ html }) {
@@ -22,10 +21,9 @@ export default function HeadScript({ html }) {
 
         if (tagName === 'script') {
           return (
-            <Script
+            <script
               key={key}
               id={reactAttrs.id || key}
-              strategy="afterInteractive"
               {...reactAttrs}
               dangerouslySetInnerHTML={{ __html: content }}
             />

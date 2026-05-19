@@ -30,29 +30,60 @@ async function fetchMetadataFromDb(path) {
   const siteName = global.title || 'Kalyan Robotic Hospital';
   const defaultDesc = global.description || 'India’s premier destination for AI-powered robotic knee replacement and spine surgery.';
 
-  // Title logic: if page title exists, append site name as suffix (unless it's the home page or global)
+  // Title & Description logic:
   let title = '';
+  let description = page.description || '';
+
   if (isGlobal) {
     title = global.title || 'Kalyan Robotic Hospital';
   } else if (path === '/') {
     title = page.title || siteName;
-  } else {
-    const pageTitle = page.title || (path.replace(/^\//, '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
-    title = page.title ? `${page.title} | ${siteName}` : `${pageTitle} | ${siteName}`;
-  }
-
-  if (!pageData && path.includes('-in-')) {
-    const parts = path.replace(/^\//, '').split('-in-');
-    if (parts.length === 2) {
-      const serviceName = parts[0].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-      const locationName = parts[1].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-      title = `Best ${serviceName} in ${locationName} | ${siteName}`;
-      const autoDesc = `Experience precision ${serviceName} with AI-powered robotics in ${locationName}, Punjab. Faster recovery and top surgical expertise at Kalyan Hospital.`;
-      if (!page.description) page.description = autoDesc;
+  } else if (page.title) {
+    if (page.title.toLowerCase().includes('kalyan')) {
+      title = page.title;
+    } else {
+      title = `${page.title} | ${siteName}`;
     }
   }
 
-  const description = page.description || defaultDesc;
+  // If title is still empty (fallback / dynamic route with no database entry), parse path
+  if (!title) {
+    const segments = path.split('/').filter(Boolean);
+    if (segments.length === 2) {
+      const stateSlug = segments[0];
+      const secondSlug = segments[1];
+      const stateName = stateSlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+      if (secondSlug.includes('-in-')) {
+        const parts = secondSlug.split('-in-');
+        const serviceSlug = parts[0];
+        const locationSlug = parts[1];
+        const serviceName = serviceSlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        const locationName = locationSlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+        title = `Best ${serviceName} in ${locationName}, ${stateName} | ${siteName}`;
+        if (!description) {
+          description = `Experience precision ${serviceName} with AI-powered robotics in ${locationName}, ${stateName}. Faster recovery and top surgical expertise at Kalyan Hospital.`;
+        }
+      } else {
+        // Standalone service or location
+        const entityName = secondSlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        title = `Best Robotic Surgical Center in ${entityName}, ${stateName} | ${siteName}`;
+        if (!description) {
+          description = `Our specialized robotic surgical center in ${entityName}, ${stateName} provides advanced AI-driven treatments. Book an appointment today at Kalyan Robotic Hospital.`;
+        }
+      }
+    } else {
+      // General fallback
+      const pageTitle = path.replace(/^\//, '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      title = `${pageTitle} | ${siteName}`;
+    }
+  }
+
+  if (!description) {
+    description = defaultDesc;
+  }
+
   const keywords = [page.keywords, global.keywords].filter(Boolean).join(', ');
   const ogImage = page.og_image || global.og_image || '';
   const canonical = page.canonical_url || global.canonical_url || '';
@@ -67,13 +98,7 @@ async function fetchMetadataFromDb(path) {
     // Raw script strings
     global_header: global.header_scripts || '',
     global_footer: global.footer_scripts || '',
-    page_header: page.header_scripts || JSON.stringify({
-      title,
-    description,
-    keywords,
-    alternates: {
-      canonical: canonical,
-    }}),
+    page_header: page.header_scripts || '',
     page_footer: page.footer_scripts || '',
     
     // Separate tags to avoid duplication between layout and pages

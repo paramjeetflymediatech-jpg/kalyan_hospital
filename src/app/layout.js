@@ -1,6 +1,6 @@
 import { Orbitron, Outfit, Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
-import { getPageMetadata, getPageMetadataSync } from "@/lib/seo";
+import { getPageMetadata } from "@/lib/seo";
 import HeadScript from "@/components/Seo/HeadScript"; 
 const orbitron = Orbitron({
   subsets: ["latin"],
@@ -36,27 +36,22 @@ export async function generateMetadata() {
   };
 }
 
-function GlobalScripts({ position }) {
-  const seoData = getPageMetadataSync('GLOBAL');
-  if (!seoData) return null;
-  if (position === 'header') {
-    return <HeadScript html={seoData.global_header} />;
-  } else {
-    return <HeadScript html={seoData.global_footer} />;
-  }
-}
-
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const seoData = await getPageMetadata('GLOBAL');
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+     <html lang="en" className="scroll-smooth h-full" suppressHydrationWarning>
       <head>
-        <GlobalScripts position="header" />
-        <GlobalScripts position="footer" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* Dynamic Server-Side Header Script Injection */}
+        {seoData && <HeadScript html={seoData.global_header} />}
       </head>
-      <body
-        className={`${orbitron.variable} ${outfit.variable} ${spaceGrotesk.variable} ${inter.variable} antialiased`}
-      >
-        {children}
+      <body className={`${orbitron.variable} ${outfit.variable} ${spaceGrotesk.variable} ${inter.variable} antialiased`} suppressHydrationWarning>
+        <main className="flex-grow flex flex-col">
+          {children}
+        </main>
+
+        {/* Dynamic Server-Side Footer Script Injection */}
+        {seoData && <HeadScript html={seoData.global_footer} />}
       </body>
     </html>
   );
