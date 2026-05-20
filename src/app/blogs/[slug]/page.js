@@ -59,6 +59,7 @@ export default async function BlogDetailPage({ params }) {
   const { slug } = await params;
   const blog = await getBlog(slug);
   const seoData = await getPageMetadata(`/blogs/${slug}`);
+  console.log("seoData blogs", seoData)
 
   if (!blog) notFound();
 

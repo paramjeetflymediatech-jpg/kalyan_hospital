@@ -12,7 +12,7 @@ export async function generateMetadata() {
 
 export default async function Page() {
   const seoData = await getPageMetadata('/book-appointment');
-
+  console.log("seoData boooking page", seoData)
   return (
     <>
       <HeadScript html={seoData?.page_header} />
