@@ -19,12 +19,12 @@ async function main() {
     console.log('Opening scripts/cities.xlsx...');
     const workbook = xlsx.readFile('scripts/cities.xlsx');
     
-    // 1. Ensure Himachal Pradesh State exists
-    const [HimachalPradeshState] = await State.findOrCreate({
-      where: { slug: 'himachal-pradesh' },
-      defaults: { name: 'Himachal Pradesh', slug: 'himachal-pradesh', is_active: true }
+    // 1. Ensure Jammu and Kashmir State exists
+    const [JammuAndKashmirState] = await State.findOrCreate({
+      where: { slug: 'jammu-and-kashmir' },
+      defaults: { name: 'Jammu and Kashmir', slug: 'jammu-and-kashmir', is_active: true }
     });
-    console.log(`Using Himachal Pradesh State ID: ${HimachalPradeshState.id}`);
+    console.log(`Using Jammu and Kashmir State ID: ${JammuAndKashmirState.id}`);
 
     let processedCount = 0;
     let addedCount = 0;
@@ -43,13 +43,14 @@ async function main() {
         const stateName = row[1]?.toString().trim();
         let districtName = row[2]?.toString().trim();
         const cityName = row[3]?.toString().trim();
+        console.log(stateName.toLowerCase(), 'stateName');
 
-        if (!cityName || stateName?.toLowerCase() !== 'himachal pradesh') continue;
+        if (!cityName || stateName?.toLowerCase() !== 'jammu & kashmir') continue;
 
-        // Ensure District exists under Himachal Pradesh
+        // Ensure District exists under Jammu and Kashmir
         const [district] = await District.findOrCreate({
-          where: { state_id: HimachalPradeshState.id, name: districtName },
-          defaults: { name: districtName, state_id: HimachalPradeshState.id }
+          where: { state_id: JammuAndKashmirState.id, name: districtName },
+          defaults: { name: districtName, state_id: JammuAndKashmirState.id }
         });
 
         const baseSlug = slugify(cityName);
@@ -57,8 +58,8 @@ async function main() {
         // Handle slug collision
         const existingLoc = await Location.findOne({ where: { slug: baseSlug } });
         let finalSlug = baseSlug;
-        if (existingLoc && existingLoc.state_id !== HimachalPradeshState.id) {
-          finalSlug = `${baseSlug}-himachal-pradesh`;
+        if (existingLoc && existingLoc.state_id !== JammuAndKashmirState.id) {
+          finalSlug = `${baseSlug}-jammu-and-kashmir`;
           console.log(`  ⚠️ Slug collision for '${cityName}': '${baseSlug}' already exists in another state. Using '${finalSlug}'`);
         }
 
@@ -68,7 +69,7 @@ async function main() {
           defaults: {
             name: cityName,
             slug: finalSlug,
-            state_id: HimachalPradeshState.id,
+            state_id: JammuAndKashmirState.id,
             district_id: district.id
           }
         });
@@ -78,9 +79,9 @@ async function main() {
           console.log(`  + Created: ${cityName} -> District: ${districtName} (Slug: ${finalSlug})`);
         } else {
           // Update location properties if mismatched
-          if (location.state_id !== HimachalPradeshState.id || location.district_id !== district.id) {
+          if (location.state_id !== JammuAndKashmirState.id || location.district_id !== district.id) {
             await location.update({
-              state_id: HimachalPradeshState.id,
+              state_id: JammuAndKashmirState.id,
               district_id: district.id
             });
             console.log(`  ~ Updated: ${cityName} -> District: ${districtName}`);
