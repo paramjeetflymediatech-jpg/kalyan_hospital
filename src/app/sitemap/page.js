@@ -118,7 +118,7 @@ export default async function SitemapPage({ searchParams }) {
               {/* Services List grouped by States */}
               <div className="glassmorphism p-8 rounded-[32px] border border-white/5 relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none">
-                  <Layers size={80} />
+                  {/* <Layers size={80} /> */}
                 </div>
                 <h3 className="font-orbitron font-black text-xl mb-6 text-primary tracking-tight uppercase flex items-center gap-3">
                   <span className="w-1.5 h-6 bg-primary rounded-full"></span>
