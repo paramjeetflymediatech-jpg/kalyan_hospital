@@ -122,11 +122,11 @@ export default async function SitemapPage({ searchParams }) {
                 </div>
                 <h3 className="font-orbitron font-black text-xl mb-6 text-primary tracking-tight uppercase flex items-center gap-3">
                   <span className="w-1.5 h-6 bg-primary rounded-full"></span>
-                  Services by State
+                  {/* Services by State */}
                 </h3>
                 
                 <div className="space-y-8">
-                  {states.map((state) => (
+                  {[].map((state) => (
                     <div key={state.id} className="space-y-3">
                       <h4 className="font-orbitron font-bold text-sm uppercase tracking-wider text-white/40 border-b border-white/5 pb-2">
                         {state.name}
