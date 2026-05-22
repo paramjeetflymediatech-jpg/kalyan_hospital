@@ -47,7 +47,7 @@ export default async function sitemap() {
         }
       ]
     });
-
+console.log(junctions.filter(j => j.Location && j.Location.State && j.Service))
     const locationPages = junctions
       .filter(j => j.Location && j.Location.State && j.Service)
       .map((j) => ({
