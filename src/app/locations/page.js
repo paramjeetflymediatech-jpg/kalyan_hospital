@@ -15,7 +15,6 @@ export async function generateMetadata() {
 
 export default async function LocationsPage() {
   const seoData = await getPageMetadata('/locations');
-  console.log("seoData locations", seoData)
 
   return (
     <main className="min-h-screen bg-[#050505] text-white selection:bg-primary selection:text-white">

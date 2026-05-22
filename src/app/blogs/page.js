@@ -31,8 +31,7 @@ async function getBlogs() {
 export default async function BlogListPage() {
   const { rows, count } = await getBlogs();
   const seoData = await getPageMetadata('/blogs');
-  console.log(rows, '----------rowssss',seoData)
-
+ 
   return (
     <main className="min-h-screen bg-[#0a0a0a]">
       <HeadScript html={seoData?.page_header} />

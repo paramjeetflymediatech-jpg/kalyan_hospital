@@ -18,7 +18,6 @@ export async function generateMetadata() {
 export default async function VideosPage() {
   const videos = await VideoModel.findAll({ order: [['published_at', 'DESC']] });
   const seoData = await getPageMetadata('/videos');
-  console.log("seoData videos", seoData)
   return (
     <main className="min-h-screen bg-[#050505] text-white selection:bg-primary">
       {/* Page-specific Scripts (SSR / View Source) */}
