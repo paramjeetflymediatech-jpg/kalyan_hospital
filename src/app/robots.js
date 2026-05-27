@@ -8,10 +8,9 @@ export default function robots() {
         allow: '/',
         disallow: [
           '/admin/',
-          '/api/',
-          '/_next/',
+          '/api/', 
           '/test-route/',
-          '/*?*', // Disallow query strings to prevent duplicate content
+          ///'/*?*', // Disallow query strings to prevent duplicate content
         ],
       },
     ],
