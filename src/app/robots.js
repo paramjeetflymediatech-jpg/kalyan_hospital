@@ -10,7 +10,9 @@ export default function robots() {
           '/admin/',
           '/api/', 
           '/test-route/',
-          ///'/*?*', // Disallow query strings to prevent duplicate content
+          '/*?_rsc=',
+          '/*&_rsc=',
+          //'/*?*', // Disallow query strings to prevent duplicate content
         ],
       },
     ],
